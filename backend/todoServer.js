@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require("fs");
 
 const app = express();
-const jsonPath = "./todos.json";
+const jsonPath = "./backend/todos.json";
 
 app.use(bodyParser.json());
 
