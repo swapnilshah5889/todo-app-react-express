@@ -36,3 +36,36 @@
     transform: rotate(360deg);
   }
 }
+
+.app-title-container {
+  display: flex;
+  background-color: aliceblue;
+}
+
+.h1-title {
+  flex: 8;
+  font-family: cursive;
+  color: blueviolet;
+  font-size: 30px;
+}
+
+.app-title-button-ctn {
+  flex: 2;
+  display: grid;
+  place-items: center;
+}
+
+.app-title-button {
+  font-size: large;
+  color: white;
+  border: 2px solid;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.2);
+  background-color: blueviolet;
+  transition: box-shadow 0.2s ease;
+}
+
+.app-title-button:hover {
+  box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.2);
+}
