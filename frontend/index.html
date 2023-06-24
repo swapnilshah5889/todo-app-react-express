@@ -40,7 +40,7 @@
 
     async function onPress2() {
         try {
-            const response = await fetch("http://localhost:3000/todos"); 
+            const response = await fetch("http://localhost:3001/todos"); 
             const jsonData = await response.json();
             console.log(jsonData);   
         } catch (error) {
@@ -57,12 +57,12 @@
     <br><br>
     
     <!-- Description -->
-    <label for="todoDesc">To-Do Description</label><br>
-    <input type="text" id="todoDesc" placeholder="Description">
-    <br><br>
+    <label for="todoDesc">To-Do Description</label><br/>
+    <input type="text" id="todoDesc" placeholder="Description" />
+    <br/><br/>
 
     <!-- Submit -->
-    <input type="submit" value="Submit" onclick="onPress2()">
-    <br><br>
+    <input type="submit" value="Submit" onclick="onPress2()" />
+    <br/><br/>
 </body>
 </html>
