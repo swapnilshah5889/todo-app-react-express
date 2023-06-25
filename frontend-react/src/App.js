@@ -6,6 +6,7 @@ import CardList from './components/card-list/card-list.component';
 
 function App() {
 
+  const basePath = "http://localhost:3001";
   // Variables
   const [state, setState] = useState({
     isAddTodoOpen:false,
@@ -17,17 +18,18 @@ function App() {
     setState(prevState => ({ ...prevState, isAddTodoOpen: !state.isAddTodoOpen }));
   }
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch(basePath+"/todos", {method:"GET"}); 
+      const jsonData = await response.json();
+      setState(prevState => ({ ...prevState, todoJsonArr: jsonData }));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // Fetch Data API
   useEffect(()=> {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/todos", {method:"GET"}); 
-        const jsonData = await response.json();
-        setState(prevState => ({ ...prevState, todoJsonArr: jsonData }));
-      } catch (error) {
-        console.log(error);
-      }
-    }
     fetchData();
   }, []);
 
@@ -48,6 +50,33 @@ function App() {
   function handleEdit(todoJson) {
     alert("Edit: "+todoJson.title);
   }
+
+  const addTodoAPI = async (todoJson) => {
+    try {
+      
+      const response = await fetch(basePath+"/todos", {
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(todoJson)
+      }); 
+      if(response.ok) {
+        fetchData();
+      }
+      else {
+        alert("Something went wrong");
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handleAddTodo(todoJson) {
+    toggleAddTodoForm();
+    addTodoAPI(todoJson);
+  }
   
   // Application
   return (
@@ -59,6 +88,7 @@ function App() {
         <Form 
           isOpen={state.isAddTodoOpen}
           onClose={toggleAddTodoForm}
+          onAddClick={handleAddTodo}
         />
       }
 
