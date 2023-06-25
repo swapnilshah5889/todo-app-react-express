@@ -1,34 +1,45 @@
 import logo from './logo.svg';
 import './App.css';
 import Form from './components/input-form/form/form.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import CardList from './components/card-list/card-list.component';
 
 function App() {
 
-  const [isAddTodoOpen, setAddTodoOpen] = useState(false);
+  // Variables
+  const [state, setState] = useState({
+    isAddTodoOpen:false,
+    todoJsonArr:[]
+  });
 
+  // Toggle visibility of the modal form
   function toggleAddTodoForm() {
-    setAddTodoOpen(!isAddTodoOpen);
+    setState(prevState => ({ ...prevState, isAddTodoOpen: !state.isAddTodoOpen }));
   }
 
-  async function getAllTodosAPI() {
-    try {
-      const response = await fetch("http://localhost:3001/todos", {method:"GET"}); 
-      const jsonData = await response.json();
-      console.log(jsonData);   
-    } catch (error) {
-      console.log(error);
+  // Fetch Data API
+  useEffect(()=> {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/todos", {method:"GET"}); 
+        const jsonData = await response.json();
+        setState(prevState => ({ ...prevState, todoJsonArr: jsonData }));
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
-
+    fetchData();
+  }, []);
+  
+  // Application
   return (
     <div className="App">
 
       {/* Add new todo modal form  */}
       {
-        isAddTodoOpen && 
+        state.isAddTodoOpen && 
         <Form 
-          isOpen={isAddTodoOpen}
+          isOpen={state.isAddTodoOpen}
           onClose={toggleAddTodoForm}
         />
       }
@@ -43,6 +54,14 @@ function App() {
       </div>
       
       <br/><br/>
+      
+      {/* Todo List */}
+      <div className='todo-list-cnt'>
+        <CardList 
+          toDoList={state.todoJsonArr}
+        />
+      </div>
+      
 
     </div>
   );
