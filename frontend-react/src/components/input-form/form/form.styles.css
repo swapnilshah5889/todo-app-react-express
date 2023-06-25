@@ -21,8 +21,8 @@
 
 .modal-content {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
+  padding: 30px;
+  border-radius: 20px;
 }
 
 .modal-content h2 {
@@ -55,4 +55,12 @@
 .save {
     color: white;
     background-color: green;
+}
+
+.modal-title {
+  display: inline-block;
+  width: 100%;
+  font-family: cursive;
+  font-size: 20px;
+  margin: 5px;
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './form.styles.css';
+import InputField from '../input-field/input-field.component';
 
 function Form(props){
 
@@ -8,12 +9,12 @@ function Form(props){
         todoDesc:''
     });
 
-    function handleTitleChange(event) {
-        setState(prevState => ({ ...prevState, todoTitle: event.target.value }))
+    function handleTitleChange(title) {
+        setState(prevState => ({ ...prevState, todoTitle: title }))
     }
 
-    function handleDescChange(event) {
-        setState(prevState => ({ ...prevState, todoDesc: event.target.value }))
+    function handleDescChange(desc) {
+        setState(prevState => ({ ...prevState, todoDesc: desc }))
     }
 
     function handleAddTodo() {
@@ -25,28 +26,37 @@ function Form(props){
         <div className={`modal ${props.isOpen ? 'open' : ''}`}>
             <div className="modal-content">
                 
+                <h3 className='modal-title'>Add Todo</h3>
+
                 {/* Title */}
-                <label id='modal-content' for="todoTitle">To-Do title</label><br></br>
+                <InputField 
+                    id="todoTitle"
+                    placeHolder="Title"
+                    onValueChange={handleTitleChange}
+                    value={state.todoTitle}
+                    label="Title"
+                />
+
+                {/* <label id='modal-content' for="todoTitle">To-Do title</label><br></br>
                 <input 
                     type="text" 
                     id="todoTitle" 
                     placeholder="Title"
                     onChange={handleTitleChange}
                     value={state.todoTitle}
-                />
-                <br /><br />
+                /> */}
                 
                 {/* Description */}
-                <label id='modal-content' for="todoDesc">To-Do Description</label><br/>
-                <input 
-                    type="text" 
-                    id="todoDesc" 
-                    placeholder="Description" 
-                    onChange={handleDescChange}
+                <InputField 
+                    id="todoDesc"
+                    placeHolder="Description"
+                    onValueChange={handleDescChange}
                     value={state.todoDesc}
+                    label="Description"
                 />
-                <br /><br />
 
+                <br />
+                
                 <div className='button-container'>
                     <button className='modal-content-button cancel' onClick={props.onClose}>Close</button>
                     <button className='modal-content-button save' onClick={handleAddTodo}>Add Todo</button>
