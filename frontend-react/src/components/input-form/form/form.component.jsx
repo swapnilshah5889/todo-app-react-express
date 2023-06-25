@@ -36,15 +36,6 @@ function Form(props){
                     value={state.todoTitle}
                     label="Title"
                 />
-
-                {/* <label id='modal-content' for="todoTitle">To-Do title</label><br></br>
-                <input 
-                    type="text" 
-                    id="todoTitle" 
-                    placeholder="Title"
-                    onChange={handleTitleChange}
-                    value={state.todoTitle}
-                /> */}
                 
                 {/* Description */}
                 <InputField 
