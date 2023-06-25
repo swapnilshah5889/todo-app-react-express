@@ -118,7 +118,27 @@ function App() {
   const updateTodoAPI = async(todoJson) => {
     try {
 
-      alert("Edit: "+todoJson.title);
+      const response = await fetch(basePath+"/todos/"+todoJson.id, {
+        method:"PUT",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({title:todoJson.title, description:todoJson.description})
+      }); 
+      
+      if(response.ok) {
+        let updatedArr = state.todoJsonArr.map((value) => {
+          if(value.id == todoJson.id) {
+            value.title = todoJson.title;
+            value.description = todoJson.description;
+          }
+          return value
+        });
+        setState(prevState => ({...prevState, todoJsonArr:updatedArr}));
+      }
+      else {
+        alert("Something went wrong");
+      }
 
     } catch (error) {
       console.log(error);
@@ -148,6 +168,7 @@ function App() {
           onClose={toggleAddTodoForm}
           onAddClick={handleAddTodo}
           formTitle="Add Todo"
+          okayBtnText="Add Todo"
         />
       }
 
@@ -160,6 +181,7 @@ function App() {
           onClose={toggleUpdateTodoForm}
           onAddClick={handleUpdateTodo}
           formTitle="Udpate Todo"
+          okayBtnText="Update"
         />
       }
       

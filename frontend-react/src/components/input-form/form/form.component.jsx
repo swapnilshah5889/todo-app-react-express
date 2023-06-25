@@ -7,6 +7,7 @@ import InputArea from '../input-text-area/input-text-area.component';
 function Form(props){
 
     const [state, setState] = useState({
+        todoId:props.todoJson.id,
         todoTitle:props.todoJson.title,
         todoDesc:props.todoJson.description
     });
@@ -20,7 +21,7 @@ function Form(props){
     }
 
     function handleAddTodo() {
-        let todoJson = {title:state.todoTitle, description:state.todoDesc};
+        let todoJson = {id:props.todoJson.id, title:state.todoTitle, description:state.todoDesc};
         props.onAddClick(todoJson);
     }
 
@@ -59,7 +60,7 @@ function Form(props){
                     <MyButton 
                         btnClassName="form-button okay-btn"
                         onHandleClick={handleAddTodo}
-                        buttonText="Add Todo"
+                        buttonText={props.okayBtnText}
                     />
                 </div>
             </div>
