@@ -11,13 +11,19 @@ function App() {
   // Variables
   const [state, setState] = useState({
     isAddTodoOpen:false,
-    todoJsonArr:[]
+    isEditTodoOpen:false,
+    todoJsonArr:[],
+    updateJson:{}
   });
 
   // Toggle visibility of the modal form
   function toggleAddTodoForm() {
     setState(prevState => ({ ...prevState, isAddTodoOpen: !state.isAddTodoOpen }));
-  }
+  };
+
+  function toggleUpdateTodoForm(){
+    setState(prevState => ({ ...prevState, isEditTodoOpen: !state.isEditTodoOpen }));  
+  };
 
   const fetchData = async () => {
     try {
@@ -27,7 +33,7 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   // Fetch Data API
   useEffect(()=> {
@@ -46,18 +52,19 @@ function App() {
     else {
       alert("something went wrong");
     }
-  }
+  };
 
   function handleEdit(todoJson) {
-    alert("Edit: "+todoJson.title);
-  }
+    toggleUpdateTodoForm();
+    setState(prevState=>({ ...prevState, updateJson:todoJson }));
+  };
 
   function updateTodoListAfterDelete(id) {
     const updatedTodoList = state.todoJsonArr.filter((todo) => {
       return todo.id != id;
     });
     setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
-  }
+  };
 
   // API request to add new todo
   const addTodoAPI = async (todoJson) => {
@@ -86,7 +93,7 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   
   // API to delete todo
   const deleteTodoAPI = async (id) => {
@@ -105,12 +112,28 @@ function App() {
     } catch (error) {
         console.log(error);
     }
-  }
+  };
+
+  // Udpate Todo API
+  const updateTodoAPI = async(todoJson) => {
+    try {
+
+      alert("Edit: "+todoJson.title);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   function handleAddTodo(todoJson) {
     toggleAddTodoForm();
     addTodoAPI(todoJson);
-  }
+  };
+
+  function handleUpdateTodo(todoJson) {
+    toggleUpdateTodoForm();
+    updateTodoAPI(todoJson);
+  };
   
   // Application
   return (
@@ -121,24 +144,33 @@ function App() {
         state.isAddTodoOpen && 
         <Form 
           isOpen={state.isAddTodoOpen}
+          todoJson={{}}
           onClose={toggleAddTodoForm}
           onAddClick={handleAddTodo}
+          formTitle="Add Todo"
         />
       }
 
-      {/* Add New Todo */}
-
-      {/* <div className='app-title-container'> 
-        <h1 className='h1-title'>My Todo App</h1>
-        <div className='app-title-button-ctn'>
-          <button className='app-title-button' onClick={toggleAddTodoForm}>Add New Todo</button>
-        </div>
-      </div> */}
-      <MyButton 
-        buttonText="Add New Todo"
-        onHandleClick={toggleAddTodoForm}
-      />
+      {/* Update todo modal form  */}
+      {
+        state.isEditTodoOpen && 
+        <Form 
+          isOpen={state.isEditTodoOpen}
+          todoJson={state.updateJson}
+          onClose={toggleUpdateTodoForm}
+          onAddClick={handleUpdateTodo}
+          formTitle="Udpate Todo"
+        />
+      }
       
+      <div className='app-title-container'> 
+        <h1 className='h1-title'>My Todo App</h1>
+        <MyButton 
+          btnClassName="app-title-button"
+          buttonText="Add New Todo"
+          onHandleClick={toggleAddTodoForm}
+        />
+      </div>
       <br/><br/>
       
       {/* Todo List */}

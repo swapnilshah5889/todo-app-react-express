@@ -24,3 +24,9 @@
     outline: none;
     background-color: #cce1ff88;
 }
+
+.text-area {
+    box-sizing: border-box;
+    width: 100%;
+    resize: none;
+}

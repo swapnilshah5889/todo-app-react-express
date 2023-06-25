@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import './form.styles.css';
 import InputField from '../input-field/input-field.component';
+import MyButton from '../../button/button.component';
+import InputArea from '../input-text-area/input-text-area.component';
 
 function Form(props){
 
     const [state, setState] = useState({
-        todoTitle:'',
-        todoDesc:''
+        todoTitle:props.todoJson.title,
+        todoDesc:props.todoJson.description
     });
 
     function handleTitleChange(title) {
@@ -26,7 +28,7 @@ function Form(props){
         <div className={`modal ${props.isOpen ? 'open' : ''}`}>
             <div className="modal-content">
                 
-                <h3 className='modal-title'>Add Todo</h3>
+                <h3 className='modal-title'>{props.formTitle}</h3>
 
                 {/* Title */}
                 <InputField 
@@ -38,7 +40,7 @@ function Form(props){
                 />
                 
                 {/* Description */}
-                <InputField 
+                <InputArea 
                     id="todoDesc"
                     placeHolder="Description"
                     onValueChange={handleDescChange}
@@ -49,8 +51,16 @@ function Form(props){
                 <br />
                 
                 <div className='button-container'>
-                    <button className='modal-content-button cancel' onClick={props.onClose}>Close</button>
-                    <button className='modal-content-button save' onClick={handleAddTodo}>Add Todo</button>
+                    <MyButton 
+                        btnClassName="form-button cancel-btn"
+                        onHandleClick={props.onClose}
+                        buttonText="Close"
+                    />
+                    <MyButton 
+                        btnClassName="form-button okay-btn"
+                        onHandleClick={handleAddTodo}
+                        buttonText="Add Todo"
+                    />
                 </div>
             </div>
         </div>

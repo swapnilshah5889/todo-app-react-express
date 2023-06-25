@@ -1,29 +1,24 @@
 import '../input-field.styles.css';
 
-function InputField(props) {
+function InputArea(props) {
 
-
-    function handleTitleChange(event) {
+    function handleOnChange(event) {
         props.onValueChange(event.target.value);
     }
 
     return (
         <div>
-            
             {/* Title */}
             <label className='modal-input-label' for="todoTitle">{props.label}</label><br></br>
-            
-            {/* Input */}
-            <input 
-                className='modal-input-text'
-                type="text"  
+            <textarea
                 placeholder={props.placeHolder}
-                onChange={handleTitleChange}
+                onChange={handleOnChange}
+                className='modal-input-text text-area'
                 value={props.value}
+                rows={3}
             />
-
         </div>
     );
 }
 
-export default InputField;
+export default InputArea;
