@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.app-title-container {
+  display: flex;
+  background-color: aliceblue;
+}
+
+.h1-title {
+  flex: 8;
+  font-family: cursive;
+  color: blueviolet;
+  font-size: 30px;
+}

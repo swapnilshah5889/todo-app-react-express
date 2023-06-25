@@ -1,0 +1,32 @@
+.modal-input-label {
+    margin-top: 2px;
+    display: inline-block;
+    width: 100%;
+    font-family: cursive;
+    margin-bottom: 2px;
+    text-align: left;
+    font-size: medium;
+}
+
+.modal-input-text {
+    border-radius: 5px;
+    border: 0px;
+    background-color: #cce1ff44;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-family: cursive;
+    font-size: medium;
+    color: #333;
+    transition: all .2s ease-out
+}
+
+.modal-input-text:focus{
+    outline: none;
+    background-color: #cce1ff88;
+}
+
+.text-area {
+    box-sizing: border-box;
+    width: 100%;
+    resize: none;
+}

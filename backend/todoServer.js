@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require("fs");
 
 const app = express();
-const jsonPath = "./backend/todos.json";
+const jsonPath = "./todos.json";
 
 app.use(bodyParser.json());
 
@@ -93,7 +93,7 @@ app.delete('/todos/:id', (req, res) => {
 
   fs.readFile(jsonPath, "utf8", (err, data) => {
     if (err) throw err;
-    const todos = JSON.parse(data);
+    let todos = JSON.parse(data);
     const todoIndex = findIndex(todos, parseInt(req.params.id));
     if (todoIndex === -1) {
       res.status(404).send();
@@ -113,6 +113,6 @@ app.delete('/todos/:id', (req, res) => {
 //   res.status(404).send();
 // });
 
-app.listen(3000, () => {
-    console.log("Server started at 3000 port");
+app.listen(3001, () => {
+    console.log("Server started at 3001 port");
 })
