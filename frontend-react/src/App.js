@@ -34,23 +34,31 @@ function App() {
   }, []);
 
 
-  
-  const deleteTodoAPI = async () => {
-    try {
-                
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
   function handleDelete(id) {
-    alert("Delete: "+id);
+    
+    // Check if id exists in the array
+    if(state.todoJsonArr.some((todo) => {
+      return todo.id === id;
+    })) {
+      deleteTodoAPI(id);
+    }
+    else {
+      alert("something went wrong");
+    }
   }
 
   function handleEdit(todoJson) {
     alert("Edit: "+todoJson.title);
   }
 
+  function updateTodoListAfterDelete(id) {
+    const updatedTodoList = state.todoJsonArr.filter((todo) => {
+      return todo.id != id;
+    });
+    setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
+  }
+
+  // API request to add new todo
   const addTodoAPI = async (todoJson) => {
     try {
       
@@ -61,15 +69,40 @@ function App() {
         },
         body:JSON.stringify(todoJson)
       }); 
+
+      const jsonData = await response.json();
+
+      // On success update original array by adding the new jsondata
       if(response.ok) {
-        fetchData();
+        const updatedTodoList = [...state.todoJsonArr, jsonData];
+        setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
       }
+      // Refresh data
       else {
-        alert("Something went wrong");
+        fetchData();
       }
 
     } catch (error) {
       console.log(error);
+    }
+  }
+  
+  // API to delete todo
+  const deleteTodoAPI = async (id) => {
+    try {
+      const response = await fetch(basePath+"/todos/"+id, {
+        method:"DELETE"
+      }); 
+
+      if(response.ok) {
+        updateTodoListAfterDelete(id);
+      }
+      else {
+        alert("Something went wrong");
+        fetchData();
+      }
+    } catch (error) {
+        console.log(error);
     }
   }
 
