@@ -6,6 +6,7 @@
   margin: 10px;
   border-radius: 20px;
   cursor: pointer;
+  padding-bottom: 10px;
   backface-visibility: hidden;
   transform: translateZ(0);
   transition: transform 0.35s ease-out, box-shadow 0.35s ease;

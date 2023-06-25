@@ -12,10 +12,21 @@
     place-items: center;
     grid-template-columns: 6fr 1fr 1fr;
     margin: 0px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
 
 .card-title-text {
     margin: 5px;
+    text-align: left;
+}
+
+.todo-description {
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    margin-left: 20px;
+    margin-right: 20px;
 }

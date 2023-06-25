@@ -11,12 +11,22 @@ function TodoCard(props) {
             key={todoData.id}
             className="todo-card-ctn">
 
+            {/* Card title bar */}
             <div className='card-title-ctn'>
+                
+                {/* Title */}
                 <h3 className='card-title-text'>{todoData.title}</h3>
-                <img src={editImg} alt="Image" width={20} height={20}/>
-                <img src={deleteImg} alt="Image" width={20} height={20}/>
+                
+                {/* Edit Button */}
+                <img src={editImg} alt="Edit" width={20} height={20}/>
+                
+                {/* Delete Button */}
+                <img src={deleteImg} alt="Delete" width={20} height={20}/>
+            
             </div>
-            <p>{todoData.description}</p>
+
+            {/* Description */}
+            <p className='todo-description'>{todoData.description}</p>
 
         </div>
     );
