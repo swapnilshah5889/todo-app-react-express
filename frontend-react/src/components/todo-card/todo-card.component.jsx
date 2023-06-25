@@ -6,6 +6,15 @@ function TodoCard(props) {
 
     const {todoData} = props;
 
+
+    function handleDeleteTodo() {
+        props.onDeleteClick(todoData.id);
+    }
+
+    function handleEditTodo() {
+        props.onEditClick(todoData);
+    }
+
     return (
         <div 
             key={todoData.id}
@@ -18,10 +27,14 @@ function TodoCard(props) {
                 <h3 className='card-title-text'>{todoData.title}</h3>
                 
                 {/* Edit Button */}
-                <img src={editImg} alt="Edit" width={20} height={20}/>
+                <img src={editImg} alt="Edit" width={20} height={20}
+                    onClick={handleEditTodo}
+                />
                 
                 {/* Delete Button */}
-                <img src={deleteImg} alt="Delete" width={20} height={20}/>
+                <img src={deleteImg} alt="Delete" width={20} height={20}
+                    onClick={handleDeleteTodo}
+                />
             
             </div>
 

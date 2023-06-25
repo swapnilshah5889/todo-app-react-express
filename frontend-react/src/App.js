@@ -30,6 +30,24 @@ function App() {
     }
     fetchData();
   }, []);
+
+
+  
+  const deleteTodoAPI = async () => {
+    try {
+                
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  function handleDelete(id) {
+    alert("Delete: "+id);
+  }
+
+  function handleEdit(todoJson) {
+    alert("Edit: "+todoJson.title);
+  }
   
   // Application
   return (
@@ -59,6 +77,8 @@ function App() {
       <div className='todo-list-cnt'>
         <CardList 
           toDoList={state.todoJsonArr}
+          onDeleteClick={handleDelete}
+          onEditClick={handleEdit}
         />
       </div>
       
