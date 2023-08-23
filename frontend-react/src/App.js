@@ -8,6 +8,7 @@ import MyButton from './components/button/button.component';
 function App() {
 
   const basePath = "http://localhost:3001";
+  const [refreshCount, setRefreshCount] = useState(0);
   // Variables
   const [state, setState] = useState({
     isAddTodoOpen:false,
@@ -29,7 +30,28 @@ function App() {
     try {
       const response = await fetch(basePath+"/todos", {method:"GET"}); 
       const jsonData = await response.json();
-      setState(prevState => ({ ...prevState, todoJsonArr: jsonData }));
+      // const logs = {updates:0, deletes:0, inserts:0};
+      // filteredjsonData.forEach((todo) => {
+      //   const isAvailable = state.todoJsonArr.find((item) => {
+      //     return item.id === todo.id;
+      //   });
+      //   if(!isAvailable) {
+      //     state.todoJsonArr.push(todo);
+      //     logs.inserts++;
+      //   }
+      //   else {
+      //     state.todoJsonArr.map((item) => {
+      //       if(item.id === todo.id && (item.title!== todo.title || item.description!== todo.description)) {
+      //         item.title = todo.title;
+      //         item.description = todo.description;
+      //         logs.updates++;
+      //       }
+      //     })
+      //   }
+      // })
+
+      // console.log(logs);
+      setState(prevState => ({ ...prevState, todoJsonArr: jsonData, hello:true }));
     } catch (error) {
       console.log(error);
     }
@@ -38,8 +60,12 @@ function App() {
   // Fetch Data API
   useEffect(()=> {
     fetchData();
-  }, []);
+  }, [refreshCount]);
 
+  // Refresh data at intervals of 5 seconds
+  setTimeout(() => {
+    setRefreshCount(refreshCount+1);
+  }, 5000);
 
   function handleDelete(id) {
     

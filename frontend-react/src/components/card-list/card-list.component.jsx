@@ -17,6 +17,7 @@ function CardList(props) {
         <div className="todo-card-list">
             {toDoList.map((todoJson) => (
                 <TodoCard 
+                    key={todoJson.id}
                     todoData={todoJson}
                     onDeleteClick={handleDelete}
                     onEditClick={handleEdit}
