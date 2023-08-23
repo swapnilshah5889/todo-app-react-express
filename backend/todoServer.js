@@ -107,11 +107,15 @@ app.delete('/todos/:id', (req, res) => {
   });
 });
 
+app.get('/test', (req, res) => {
+  res.status(200).json({message:"success"});
+})
 
-// for all other routes, return 404
-// app.use((req, res, next) => {
-//   res.status(404).send();
-// });
+
+//for all other routes, return 404
+app.use((req, res, next) => {
+  res.status(404).send();
+});
 
 app.listen(3001, () => {
     console.log("Server started at 3001 port");
