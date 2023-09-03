@@ -5,11 +5,12 @@ import CardList from './components/card-list/card-list.component';
 import MyButton from './components/button/button.component';
 import axios from 'axios';
 import ErrorCard from './components/error-card/error.component';
+import AppBar from './components/app-bar/AppBar';
 
 function App() {
 
   const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const basePath = "http://localhost:3001";
   const [refreshCount, setRefreshCount] = useState(0);
   // Variables
@@ -49,17 +50,19 @@ function App() {
       const jsonData = response.data;
 
       // API Error
-      if(!jsonData.stats) {
+      if(!jsonData.status) {
         setIsError(true);
         return;
       }
-
+      
       // Set Data
       console.log(jsonData.data);
       // const response = await fetch(basePath+"/todos", {method:"GET"}); 
       // const jsonData = await response.json();
-      setState(prevState => ({ ...prevState, todoJsonArr: jsonData, hello:true }));
+      setState(prevState => ({ ...prevState, todoJsonArr: jsonData.data, hello:true }));
+      setIsError(false);
     } catch (error) {
+      setIsError(true);
       console.log(error);
     }
   };
@@ -102,27 +105,26 @@ function App() {
   // API request to add new todo
   const addTodoAPI = async (todoJson) => {
     try {
-      
-      const response = await fetch(basePath+"/todos", {
-        method:"POST",
+
+      const config = {
         headers: {
+          username:'swapnil@gmail.com',
           'Content-Type': 'application/json'
-        },
-        body:JSON.stringify(todoJson)
-      }); 
-
-      const jsonData = await response.json();
-
-      // On success update original array by adding the new jsondata
-      if(response.ok) {
-        const updatedTodoList = [...state.todoJsonArr, jsonData];
-        setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
+        }
       }
-      // Refresh data
-      else {
+      
+      const response = await axios.post(basePath+"/todos", JSON.stringify(todoJson), config);
+      
+      // If error - refresh data
+      if(response.status !== 200 || !response.data.status) {
         fetchData();
       }
 
+      // On success update original array by adding the new jsondata
+      const jsonData = response.data;
+      const updatedTodoList = [...state.todoJsonArr, jsonData];
+      setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
+      
     } catch (error) {
       console.log(error);
     }
@@ -242,17 +244,14 @@ function App() {
       }
       
       {/* App Bar */}
-      <div className='app-title-container'> 
-        <h1 className='h1-title'>My Todo App</h1>
-        <MyButton 
-          btnClassName="app-title-button"
-          buttonText="Add New Todo"
-          onHandleClick={toggleAddTodoForm}
-        />
-      </div>
-      <br/><br/>
+      <AppBar 
+        toggleAddTodoForm = {toggleAddTodoForm}
+      />
 
-      {AppCard}
+      {/* Content */}
+      <div className='m-5'>
+        {AppCard}
+      </div>
 
     </div>
   );

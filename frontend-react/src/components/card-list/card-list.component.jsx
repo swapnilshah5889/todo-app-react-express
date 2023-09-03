@@ -1,5 +1,4 @@
 import TodoCard from "../todo-card/todo-card.component";
-import './card-list.styles.css';
 
 function CardList(props) {
 
@@ -14,7 +13,7 @@ function CardList(props) {
     }
 
     return (
-        <div className="todo-card-list">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {toDoList.map((todoJson) => (
                 <TodoCard 
                     key={todoJson.id}

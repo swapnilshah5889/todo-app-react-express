@@ -3507,6 +3507,11 @@
     "postcss-value-parser" "^4.2.0"
     "semver" "^7.3.8"
 
+"css-mediaquery@^0.1.2":
+  "integrity" "sha512-COtn4EROW5dBGlE/4PiKnh6rZpAPxDeFLaEEwt4i10jpDMFt2EhQGS79QmmrO+iKCHv0PU/HrOWEhijFd1x99Q=="
+  "resolved" "https://registry.npmjs.org/css-mediaquery/-/css-mediaquery-0.1.2.tgz"
+  "version" "0.1.2"
+
 "css-minimizer-webpack-plugin@^3.2.0":
   "integrity" "sha512-1u6D71zeIfgngN2XNRJefc/hY7Ybsxd74Jm4qngIXyUEk7fss3VUzuHxLAq/R8NAba4QU9OUSaMZlbpRc7bM4Q=="
   "resolved" "https://registry.npmjs.org/css-minimizer-webpack-plugin/-/css-minimizer-webpack-plugin-3.4.1.tgz"
@@ -5170,6 +5175,11 @@
   "resolved" "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
   "version" "2.1.0"
 
+"hyphenate-style-name@^1.0.0":
+  "integrity" "sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ=="
+  "resolved" "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz"
+  "version" "1.0.4"
+
 "iconv-lite@^0.6.3":
   "integrity" "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw=="
   "resolved" "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.6.3.tgz"
@@ -6432,6 +6442,13 @@
   dependencies:
     "tmpl" "1.0.5"
 
+"matchmediaquery@^0.3.0":
+  "integrity" "sha512-Hlk20WQHRIm9EE9luN1kjRjYXAQToHOIAHPJn9buxBwuhfTHoKUcX+lXBbxc85DVQfXYbEQ4HcwQdd128E3qHQ=="
+  "resolved" "https://registry.npmjs.org/matchmediaquery/-/matchmediaquery-0.3.1.tgz"
+  "version" "0.3.1"
+  dependencies:
+    "css-mediaquery" "^0.1.2"
+
 "mdn-data@2.0.14":
   "integrity" "sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow=="
   "resolved" "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.14.tgz"
@@ -7616,7 +7633,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-"prop-types@^15.8.1":
+"prop-types@^15.6.1", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   "version" "15.8.1"
@@ -7774,6 +7791,16 @@
   "resolved" "https://registry.npmjs.org/react-refresh/-/react-refresh-0.11.0.tgz"
   "version" "0.11.0"
 
+"react-responsive@^9.0.2":
+  "integrity" "sha512-+4CCab7z8G8glgJoRjAwocsgsv6VA2w7JPxFWHRc7kvz8mec1/K5LutNC2MG28Mn8mu6+bu04XZxHv5gyfT7xQ=="
+  "resolved" "https://registry.npmjs.org/react-responsive/-/react-responsive-9.0.2.tgz"
+  "version" "9.0.2"
+  dependencies:
+    "hyphenate-style-name" "^1.0.0"
+    "matchmediaquery" "^0.3.0"
+    "prop-types" "^15.6.1"
+    "shallow-equal" "^1.2.1"
+
 "react-scripts@5.0.1":
   "integrity" "sha512-8VAmEm/ZAwQzJ+GOMLbBsTdDKOpuZh7RPs0UymvBR2vRk4iZWCskjbFnxqjrzoIvlNNRZ3QJFx6/qDSi6zSnaQ=="
   "resolved" "https://registry.npmjs.org/react-scripts/-/react-scripts-5.0.1.tgz"
@@ -7829,7 +7856,7 @@
   optionalDependencies:
     "fsevents" "^2.3.2"
 
-"react@^18.0.0", "react@^18.2.0", "react@>= 16":
+"react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>=16.8.0":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   "version" "18.2.0"
@@ -8289,6 +8316,11 @@
   "resolved" "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   "version" "1.2.0"
 
+"shallow-equal@^1.2.1":
+  "integrity" "sha512-S4vJDjHHMBaiZuT9NPb616CSmLf618jawtv3sufLl6ivK8WocjAo58cXwbRV1cgqxH0Qbv+iUt6m05eqEa2IRA=="
+  "resolved" "https://registry.npmjs.org/shallow-equal/-/shallow-equal-1.2.1.tgz"
+  "version" "1.2.1"
+
 "shebang-command@^2.0.0":
   "integrity" "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA=="
   "resolved" "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz"
@@ -8719,10 +8751,10 @@
   "resolved" "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz"
   "version" "3.2.4"
 
-"tailwindcss@^3.0.2":
-  "integrity" "sha512-9jPkMiIBXvPc2KywkraqsUfbfj+dHDb+JPWtSJa9MLFdrPyazI7q6WX2sUrm7R9eVR7qqv3Pas7EvQFzxKnI6w=="
-  "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.3.2.tgz"
-  "version" "3.3.2"
+"tailwindcss@^3.0.2", "tailwindcss@^3.3.3":
+  "integrity" "sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w=="
+  "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.3.3.tgz"
+  "version" "3.3.3"
   dependencies:
     "@alloc/quick-lru" "^5.2.0"
     "arg" "^5.0.2"
@@ -8744,7 +8776,6 @@
     "postcss-load-config" "^4.0.1"
     "postcss-nested" "^6.0.1"
     "postcss-selector-parser" "^6.0.11"
-    "postcss-value-parser" "^4.2.0"
     "resolve" "^1.22.2"
     "sucrase" "^3.32.0"
 
