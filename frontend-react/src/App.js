@@ -1,12 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
 import Form from './components/input-form/form/form.component';
 import { useEffect, useState } from 'react';
 import CardList from './components/card-list/card-list.component';
 import MyButton from './components/button/button.component';
+import axios from 'axios';
+import ErrorCard from './components/error-card/error.component';
 
 function App() {
 
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const basePath = "http://localhost:3001";
   const [refreshCount, setRefreshCount] = useState(0);
   // Variables
@@ -28,29 +31,33 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(basePath+"/todos", {method:"GET"}); 
-      const jsonData = await response.json();
-      // const logs = {updates:0, deletes:0, inserts:0};
-      // filteredjsonData.forEach((todo) => {
-      //   const isAvailable = state.todoJsonArr.find((item) => {
-      //     return item.id === todo.id;
-      //   });
-      //   if(!isAvailable) {
-      //     state.todoJsonArr.push(todo);
-      //     logs.inserts++;
-      //   }
-      //   else {
-      //     state.todoJsonArr.map((item) => {
-      //       if(item.id === todo.id && (item.title!== todo.title || item.description!== todo.description)) {
-      //         item.title = todo.title;
-      //         item.description = todo.description;
-      //         logs.updates++;
-      //       }
-      //     })
-      //   }
-      // })
 
-      // console.log(logs);
+      const config = {
+        headers: {
+          username:'swapnil@gmail.com'
+        }
+      }
+      
+      const response = await axios.get(basePath+"/todos", config);
+      
+      // Network Error
+      if(response.status !== 200) {
+        setIsError(true);
+        return;
+      }
+
+      const jsonData = response.data;
+
+      // API Error
+      if(!jsonData.stats) {
+        setIsError(true);
+        return;
+      }
+
+      // Set Data
+      console.log(jsonData.data);
+      // const response = await fetch(basePath+"/todos", {method:"GET"}); 
+      // const jsonData = await response.json();
       setState(prevState => ({ ...prevState, todoJsonArr: jsonData, hello:true }));
     } catch (error) {
       console.log(error);
@@ -65,7 +72,7 @@ function App() {
   // Refresh data at intervals of 5 seconds
   setTimeout(() => {
     setRefreshCount(refreshCount+1);
-  }, 5000);
+  }, 10000);
 
   function handleDelete(id) {
     
@@ -180,6 +187,29 @@ function App() {
     toggleUpdateTodoForm();
     updateTodoAPI(todoJson);
   };
+
+  const handleTryAgainClick = () => {
+    fetchData();
+  };
+
+  let AppCard;
+  // Error Card
+  if(isError) {
+    AppCard = <ErrorCard 
+      errorButtonClick={handleTryAgainClick}
+    />
+  }
+  // Todo Card List
+  else {
+    AppCard = (
+    <div className='todo-list-cnt'>
+      <CardList 
+        toDoList={state.todoJsonArr}
+        onDeleteClick={handleDelete}
+        onEditClick={handleEdit}
+      />
+    </div>);
+  }
   
   // Application
   return (
@@ -211,6 +241,7 @@ function App() {
         />
       }
       
+      {/* App Bar */}
       <div className='app-title-container'> 
         <h1 className='h1-title'>My Todo App</h1>
         <MyButton 
@@ -220,16 +251,8 @@ function App() {
         />
       </div>
       <br/><br/>
-      
-      {/* Todo List */}
-      <div className='todo-list-cnt'>
-        <CardList 
-          toDoList={state.todoJsonArr}
-          onDeleteClick={handleDelete}
-          onEditClick={handleEdit}
-        />
-      </div>
-      
+
+      {AppCard}
 
     </div>
   );

@@ -30,7 +30,7 @@ coverage
 build/
 
 # Environment variables
-.env
+.env*
 
 # React
 
