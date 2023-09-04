@@ -9,7 +9,8 @@ function Form(props){
     const [state, setState] = useState({
         todoId:props.todoJson._id,
         todoTitle:props.todoJson.title,
-        todoDesc:props.todoJson.description
+        todoDesc:props.todoJson.description,
+        todoIsDone : props.todoJson.isDone
     });
 
     function handleTitleChange(title) {
@@ -24,7 +25,8 @@ function Form(props){
         // Valid todo
         if(state.todoDesc && state.todoTitle &&
             state.todoDesc.length > 0 && state.todoTitle.length > 0) {
-            let todoJson = {_id:props.todoJson._id, title:state.todoTitle, description:state.todoDesc};
+            let todoJson = {_id:props.todoJson._id, title:state.todoTitle, 
+                description:state.todoDesc, isDone:state.todoIsDone};
             props.onAddClick(todoJson);
         }
         else {

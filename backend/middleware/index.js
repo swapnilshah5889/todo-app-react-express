@@ -1,4 +1,5 @@
 import { usersCollection, todosCollection } from "../db/index.js";
+import mongoose from "mongoose";
 
 // Verify If User Exists
 const verifyUser = async (req, res, next) => {
@@ -20,14 +21,20 @@ const verifyUser = async (req, res, next) => {
 }
 
 const verifyTodo = async (req, res, next) => {
-    const todo = await todosCollection.findById(req.params.id);
-    if(todo) {
-        req.todo = todo;
-        next();
+    try {
+        if(mongoose.Types.ObjectId.isValid(req.params.id)) {
+            const todo = await todosCollection.findOne({_id:req.params.id});
+            if(todo) {
+                req.todo = todo;
+                next();
+                return;
+            }
+        }
+        
+    } catch (error) {
+        console.log(error);
     }
-    else {
-        res.status(500).json({status:false, message:'Invalid request'});
-    }
+    res.status(500).json({status:false, message:'Invalid request'});
 }
 
 const verifyNewUser = async (req, res, next) => {

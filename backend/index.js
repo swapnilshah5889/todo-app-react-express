@@ -110,6 +110,22 @@ app.put('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req, 
 
 });
 
+// Delete Todo
+app.delete('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req, res) => {
+    try {
+        if(req.userId == req.todo.userId) {
+            const todo = await todosCollection.findByIdAndDelete(req.todo._id);
+            res.status(200).json({status:true, message: 'Todo deleted successfully'});
+        }
+        else {
+            res.status(500).json({status: false, message: 'Invalid Request'});
+        }
+
+    } catch (error) {
+        res.status(500).json({status: false, message: 'Something went wrong'});
+    }
+});
+
 //for all other routes, return 404
 app.use((req, res, next) => {
     res.status(404).send();

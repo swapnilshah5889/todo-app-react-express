@@ -42,11 +42,11 @@ function App() {
       const response = await axios.get(basePath+"/todos", config);
       
       // Network Error
-      if(response.status !== 200) {
+      if(response.status !== 200 || !response.data.status) {
         setIsError(true);
         return;
       }
-
+      console.log(response.data);
       const jsonData = response.data;
 
       // API Error
@@ -56,7 +56,6 @@ function App() {
       }
       
       // Set Data
-      console.log(jsonData.data);
       // const response = await fetch(basePath+"/todos", {method:"GET"}); 
       // const jsonData = await response.json();
       setState(prevState => ({ ...prevState, todoJsonArr: jsonData.data, hello:true }));
@@ -176,9 +175,7 @@ function App() {
       
       let updatedArr = state.todoJsonArr.map((value) => {
         if(value._id === todoJson._id) {
-          value.title = todoJson.title;
-          value.description = todoJson.description;
-          value.isDone = todoJson.isDone;
+          return todoJson;
         }
         return value
       });
