@@ -18,8 +18,11 @@
 }
 
 .form-button {
+    white-space: nowrap;
+    overflow: hidden;
     display: inline-block;
-    width: 95%;
+    margin-left: 2px;
+    margin-right: 2px;
     font-size: 15px;
     color: white;
     border: 2px solid;

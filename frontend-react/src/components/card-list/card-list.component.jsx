@@ -16,10 +16,11 @@ function CardList(props) {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {toDoList.map((todoJson) => (
                 <TodoCard 
-                    key={todoJson.id}
+                    key={todoJson._id}
                     todoData={todoJson}
                     onDeleteClick={handleDelete}
                     onEditClick={handleEdit}
+                    onStatusChange={props.onStatusChange}
                 />
             ))}
         </div>

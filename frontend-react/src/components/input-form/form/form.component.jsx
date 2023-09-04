@@ -7,7 +7,7 @@ import InputArea from '../input-text-area/input-text-area.component';
 function Form(props){
 
     const [state, setState] = useState({
-        todoId:props.todoJson.id,
+        todoId:props.todoJson._id,
         todoTitle:props.todoJson.title,
         todoDesc:props.todoJson.description
     });
@@ -21,8 +21,15 @@ function Form(props){
     }
 
     function handleAddTodo() {
-        let todoJson = {id:props.todoJson.id, title:state.todoTitle, description:state.todoDesc};
-        props.onAddClick(todoJson);
+        // Valid todo
+        if(state.todoDesc && state.todoTitle &&
+            state.todoDesc.length > 0 && state.todoTitle.length > 0) {
+            let todoJson = {_id:props.todoJson._id, title:state.todoTitle, description:state.todoDesc};
+            props.onAddClick(todoJson);
+        }
+        else {
+            alert("Invalid Todo!");
+        }
     }
 
     return(

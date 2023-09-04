@@ -81,8 +81,9 @@ function App() {
     
     // Check if id exists in the array
     if(state.todoJsonArr.some((todo) => {
-      return todo.id === id;
-    })) {
+      return todo._id === id;
+    })) 
+    {
       deleteTodoAPI(id);
     }
     else {
@@ -97,7 +98,7 @@ function App() {
 
   function updateTodoListAfterDelete(id) {
     const updatedTodoList = state.todoJsonArr.filter((todo) => {
-      return todo.id != id;
+      return todo._id != id;
     });
     setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
   };
@@ -126,6 +127,7 @@ function App() {
       setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
       
     } catch (error) {
+      fetchData();
       console.log(error);
     }
   };
@@ -133,18 +135,22 @@ function App() {
   // API to delete todo
   const deleteTodoAPI = async (id) => {
     try {
-      const response = await fetch(basePath+"/todos/"+id, {
-        method:"DELETE"
-      }); 
-
-      if(response.ok) {
-        updateTodoListAfterDelete(id);
+      const config = {
+        headers: {
+          username:'swapnil@gmail.com',
+          'Content-Type': 'application/json'
+        }
       }
-      else {
-        alert("Something went wrong");
+      const response = await axios.delete(basePath+"/todos/"+id, config);
+
+      // If error - refresh data
+      if(response.status !== 200 || !response.data.status) {
         fetchData();
       }
+      updateTodoListAfterDelete(id);
+      setIsError(false);
     } catch (error) {
+        fetchData();
         console.log(error);
     }
   };
@@ -153,29 +159,33 @@ function App() {
   const updateTodoAPI = async(todoJson) => {
     try {
 
-      const response = await fetch(basePath+"/todos/"+todoJson.id, {
-        method:"PUT",
+      const config = {
         headers: {
+          username:'swapnil@gmail.com',
           'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({title:todoJson.title, description:todoJson.description})
-      }); 
+        }
+      }
+      const body = {title:todoJson.title, description:todoJson.description, isDone:todoJson.isDone};
+
+      const response = await axios.put(basePath+"/todos/"+todoJson._id, JSON.stringify(body), config);
+
+      // If error - refresh data
+      if(response.status !== 200 || !response.data.status) {
+        fetchData();
+      }
       
-      if(response.ok) {
-        let updatedArr = state.todoJsonArr.map((value) => {
-          if(value.id == todoJson.id) {
-            value.title = todoJson.title;
-            value.description = todoJson.description;
-          }
-          return value
-        });
-        setState(prevState => ({...prevState, todoJsonArr:updatedArr}));
-      }
-      else {
-        alert("Something went wrong");
-      }
+      let updatedArr = state.todoJsonArr.map((value) => {
+        if(value._id === todoJson._id) {
+          value.title = todoJson.title;
+          value.description = todoJson.description;
+          value.isDone = todoJson.isDone;
+        }
+        return value
+      });
+      setState(prevState => ({...prevState, todoJsonArr:updatedArr}));
 
     } catch (error) {
+      fetchData();
       console.log(error);
     }
   };
@@ -209,6 +219,7 @@ function App() {
         toDoList={state.todoJsonArr}
         onDeleteClick={handleDelete}
         onEditClick={handleEdit}
+        onStatusChange={updateTodoAPI}
       />
     </div>);
   }

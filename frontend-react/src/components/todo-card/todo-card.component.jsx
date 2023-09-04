@@ -18,10 +18,10 @@ const CheckBox = ({isChecked=false, onCheckBoxChange}) => {
 
 }
 
-function TodoCard({todoData, onDeleteClick, onEditClick}) {
+function TodoCard({todoData, onDeleteClick, onEditClick, onStatusChange}) {
 
     function handleDeleteTodo() {
-        onDeleteClick(todoData.id);
+        onDeleteClick(todoData._id);
     }
 
     function handleEditTodo() {
@@ -29,12 +29,13 @@ function TodoCard({todoData, onDeleteClick, onEditClick}) {
     }
 
     function onCheckBoxChange() {
-        // todoData.isDone = !todoData.isDone;
+        todoData.isDone = !todoData.isDone;
+        onStatusChange(todoData);
     }
 
     return (
         <div 
-            key={todoData.id}
+            key={todoData._id}
             className="todo-card-ctn">
 
             {/* Card title bar */}
