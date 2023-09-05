@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppTitle } from "../../components/app-bar/AppBar";
 import MyButton from "../../components/button/button.component";
 import InputField from "../../components/input-form/input-field/input-field.component";
 import axios from 'axios';
-import { BASE_URL } from "../../utils";
+import { BASE_URL, USER_COOKIE, IsUserLoggedIn } from "../../utils";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
-const LoginCard = ({registerClick}) => {
+const LoginCard = ({registerClick, loginSuccess}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");    
     const [error, setError] = useState();
@@ -43,6 +45,7 @@ const LoginCard = ({registerClick}) => {
 
             // Login Success
             setError(undefined);
+            loginSuccess(email);
 
         } catch (error) {
             if(error.response?.data?.message) {
@@ -110,12 +113,11 @@ const LoginCard = ({registerClick}) => {
     );
 }
 
-const SignUpCard = ({loginClick}) => {
+const SignUpCard = ({loginClick, loginSuccess}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confPassword, setConfPassword] = useState("");
     const [error, setError] = useState();
-
     const validateInputs = () => {
         if(email.length>0 && password.length>0) {
 
@@ -158,6 +160,7 @@ const SignUpCard = ({loginClick}) => {
 
             // Register Success
             setError(undefined);
+            loginSuccess(email);
 
         } catch (error) {
             if(error.response?.data?.message) {
@@ -241,25 +244,48 @@ const SignUpCard = ({loginClick}) => {
 
 const SignUpLoginPage = () => {
 
-
     const [isLogin, setIsLogin] = useState(true);
+    const [cookies, setCookie] = useCookies([USER_COOKIE]);
+    const navigate = useNavigate();
 
-    return (
-        <div className="flex flex-col justify-center items-center m-10">
-            <AppTitle isLogin={isLogin} />
-            <div className="max-w-sm p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
-                {isLogin ?
-                    <LoginCard 
-                        registerClick={() => setIsLogin(false)}
-                    />
-                :
-                    <SignUpCard 
-                        loginClick={() => setIsLogin(true)}
-                    />
-                }
+
+    const handleLoginSuccess = (email) => {
+        setCookie('username', email, { path: '/' })
+        navigate('/');
+    }
+
+    useEffect(() => {
+        if(IsUserLoggedIn(cookies)) {
+            navigate('/');
+        } 
+    }, []);
+    
+    // Show the login form when user not logged in
+    if(!IsUserLoggedIn(cookies)){
+        return (
+            <div className="flex flex-col justify-center items-center m-10">
+                <AppTitle isLogin={isLogin} />
+     
+                <div className="max-w-sm p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
+                    {isLogin ?
+                        <LoginCard 
+                            registerClick={() => setIsLogin(false)}
+                            loginSuccess={handleLoginSuccess}
+                        />
+                    :
+                        <SignUpCard 
+                            loginClick={() => setIsLogin(true)}
+                            loginSuccess={handleLoginSuccess}
+                        />
+                    }
+                </div>
+                
             </div>
-        </div>
-    );
+        );
+    }
+    else {
+        navigate('/');
+    }
 
 };
 

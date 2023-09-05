@@ -5,12 +5,25 @@ import CardList from '../../components/card-list/card-list.component';
 import axios from 'axios';
 import ErrorCard from '../../components/error-card/error.component';
 import AppBar from '../../components/app-bar/AppBar';
+import { useCookies } from "react-cookie";
+import { IsUserLoggedIn, USER_COOKIE, GetUsername } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const [isError, setIsError] = useState(false);
   // const [isLoading, setIsLoading] = useState(true);
   const basePath = "http://localhost:3001";
   const [refreshCount, setRefreshCount] = useState(0);
+  const [cookies, setCookie, removeCookie] = useCookies([USER_COOKIE]);
+  const navigate = useNavigate();
+
+  // Go to login page if user not logged in
+  useEffect(() => {
+    if(!IsUserLoggedIn(cookies)) {
+      navigate('/login');
+    }
+  },[])
+
   // Variables
   const [state, setState] = useState({
     isAddTodoOpen:false,
@@ -31,9 +44,11 @@ const HomePage = () => {
   const fetchData = async () => {
     try {
 
+      const username = GetUsername(cookies);
+
       const config = {
         headers: {
-          username:'swapnil@gmail.com'
+          username: username
         }
       }
       
@@ -106,7 +121,7 @@ const HomePage = () => {
 
       const config = {
         headers: {
-          username:'swapnil@gmail.com',
+          username: GetUsername(cookies),
           'Content-Type': 'application/json'
         }
       }
@@ -120,7 +135,7 @@ const HomePage = () => {
 
       // On success update original array by adding the new jsondata
       const jsonData = response.data;
-      const updatedTodoList = [...state.todoJsonArr, jsonData];
+      const updatedTodoList = [...state.todoJsonArr, jsonData.data];
       setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
       
     } catch (error) {
@@ -134,7 +149,7 @@ const HomePage = () => {
     try {
       const config = {
         headers: {
-          username:'swapnil@gmail.com',
+          username: GetUsername(cookies),
           'Content-Type': 'application/json'
         }
       }
@@ -158,7 +173,7 @@ const HomePage = () => {
 
       const config = {
         headers: {
-          username:'swapnil@gmail.com',
+          username: GetUsername(cookies),
           'Content-Type': 'application/json'
         }
       }
@@ -199,6 +214,13 @@ const HomePage = () => {
     fetchData();
   };
 
+  const handleLogout = () => {
+    if(IsUserLoggedIn(cookies)){ 
+      removeCookie('username', { path: '/' });
+      navigate('/login');
+    }
+  }
+
   let AppCard;
   // Error Card
   if(isError) {
@@ -219,50 +241,57 @@ const HomePage = () => {
     </div>);
   }
   
-  // Application
-  return (
-
-    
-    <div className="App">
-
-      {/* Add new todo modal form  */}
-      {
-        state.isAddTodoOpen && 
-        <Form 
-          isOpen={state.isAddTodoOpen}
-          todoJson={{}}
-          onClose={toggleAddTodoForm}
-          onAddClick={handleAddTodo}
-          formTitle="Add Todo"
-          okayBtnText="Add Todo"
-        />
-      }
-
-      {/* Update todo modal form  */}
-      {
-        state.isEditTodoOpen && 
-        <Form 
-          isOpen={state.isEditTodoOpen}
-          todoJson={state.updateJson}
-          onClose={toggleUpdateTodoForm}
-          onAddClick={handleUpdateTodo}
-          formTitle="Udpate Todo"
-          okayBtnText="Update"
-        />
-      }
+  if(IsUserLoggedIn(cookies)) {
+    // Application
+    return (
+  
       
-      {/* App Bar */}
-      <AppBar 
-        toggleAddTodoForm = {toggleAddTodoForm}
-      />
-
-      {/* Content */}
-      <div className='m-5'>
-        {AppCard}
+      <div className="App">
+  
+        {/* Add new todo modal form  */}
+        {
+          state.isAddTodoOpen && 
+          <Form 
+            isOpen={state.isAddTodoOpen}
+            todoJson={{}}
+            onClose={toggleAddTodoForm}
+            onAddClick={handleAddTodo}
+            formTitle="Add Todo"
+            okayBtnText="Add Todo"
+          />
+        }
+  
+        {/* Update todo modal form  */}
+        {
+          state.isEditTodoOpen && 
+          <Form 
+            isOpen={state.isEditTodoOpen}
+            todoJson={state.updateJson}
+            onClose={toggleUpdateTodoForm}
+            onAddClick={handleUpdateTodo}
+            formTitle="Udpate Todo"
+            okayBtnText="Update"
+          />
+        }
+        
+        {/* App Bar */}
+        <AppBar 
+          toggleAddTodoForm = {toggleAddTodoForm}
+          onLogoutClick={handleLogout}
+        />
+  
+        {/* Content */}
+        <div className='m-5'>
+          {AppCard}
+        </div>
+  
       </div>
-
-    </div>
-  );
+    );
+  }
+  else {
+    navigate('/login');
+    return <></>
+  }
 
 }
 

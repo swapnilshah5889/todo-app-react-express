@@ -14,7 +14,7 @@ export const AppTitle = () => {
     );
 }
 
-const AppBar = ({toggleAddTodoForm}) => {
+const AppBar = ({toggleAddTodoForm, onLogoutClick}) => {
 
     const isTabletOrMobile = useMediaQuery({ maxWidth: 640 })  
     return (
@@ -30,7 +30,7 @@ const AppBar = ({toggleAddTodoForm}) => {
                 <MyButton 
                     btnClassName="app-title-button"
                     buttonText="Logout"
-                    onHandleClick={toggleAddTodoForm}
+                    onHandleClick={onLogoutClick}
                 />
             </div>
         </div>
