@@ -2,10 +2,56 @@ import { useState } from "react";
 import { AppTitle } from "../../components/app-bar/AppBar";
 import MyButton from "../../components/button/button.component";
 import InputField from "../../components/input-form/input-field/input-field.component";
+import axios from 'axios';
+import { BASE_URL } from "../../utils";
 
 const LoginCard = ({registerClick}) => {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState("");    
+    const [error, setError] = useState();
+
+    const validateInputs = () => {
+        if(email.length>0 && password.length>0)
+            return true;
+        return false;
+    }
+
+    const loginAPI = async () => {
+        try {
+            const data = {
+                username: email,
+                password: password
+            }
+            const config = {
+                headers: {
+                'Content-Type': 'application/json'  
+                }
+            }
+            const response = await axios.post(BASE_URL+"/userlogin", JSON.stringify(data), config);
+
+            // N/W error
+            if(response.statusText !== 'OK') {
+                setError('Something went wrong');
+                return;
+            }
+
+            // API Error
+            if(!response.data.status) {
+                setError(response.data.message);
+                return;
+            }
+
+            // Login Success
+            setError(undefined);
+
+        } catch (error) {
+            if(error.response?.data?.message) {
+                setError(error.response.data.message);
+                return;
+            }
+            setError("Something went wrong");
+        }
+    }
     
     const handleEmailChange = (email) => {
         setEmail(email);
@@ -16,8 +62,8 @@ const LoginCard = ({registerClick}) => {
     };
 
     const handleLogin = () => {
-        console.log(email);
-        console.log(password);
+        if(validateInputs())
+            loginAPI();
     };
 
     const handleRegisterClick = () => {
@@ -28,6 +74,9 @@ const LoginCard = ({registerClick}) => {
         <div className="flex flex-col justify-center">
             <h3 style={{fontFamily:'cursive', fontSize:'24px', color:'#8A2BE2'}} 
             className='m-3 inline-flex justify-center items-center'>Login</h3>
+            {error && 
+                <p className="inline-flex justify-center text-red-600 text-sm mb-2">{error}</p>
+            }
             <InputField 
                 id="userEmail"
                 placeHolder="Email"
@@ -65,6 +114,59 @@ const SignUpCard = ({loginClick}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confPassword, setConfPassword] = useState("");
+    const [error, setError] = useState();
+
+    const validateInputs = () => {
+        if(email.length>0 && password.length>0) {
+
+            if(confPassword === password){
+                setError(undefined);
+                return true;
+            }
+            else {
+                setError("Passwords do not match");
+            }
+        }
+        return false;
+    }
+
+    const signupAPI = async () => {
+        try {
+            const data = {
+                username: email,
+                password: password
+            }
+            const config = {
+                headers: {
+                'Content-Type': 'application/json'  
+                }
+            }
+
+            const response = await axios.post(BASE_URL+"/signup", JSON.stringify(data), config);
+
+            // N/W error
+            if(response.statusText !== 'OK') {
+                setError(response.data.message);
+                return;
+            }
+
+            // API Error
+            if(!response.data.status) {
+                setError(response.data.message);
+                return;
+            }
+
+            // Register Success
+            setError(undefined);
+
+        } catch (error) {
+            if(error.response?.data?.message) {
+                setError(error.response.data.message);
+                return;
+            }
+            setError("Something went wrong");
+        }
+    }
     
     const handleEmailChange = (email) => {
         setEmail(email);
@@ -79,8 +181,8 @@ const SignUpCard = ({loginClick}) => {
     };
 
     const handleSignUp = () => {
-        console.log(email);
-        console.log(password);
+        if(validateInputs())
+            signupAPI();
     };
 
     const handleLoginClick = () => {
@@ -91,6 +193,11 @@ const SignUpCard = ({loginClick}) => {
         <div className="flex flex-col justify-center">
             <h3 style={{fontFamily:'cursive', fontSize:'24px', color:'#8A2BE2'}} 
             className='m-3 inline-flex justify-center items-center'>Sign Up</h3>
+
+            {error && 
+                <p className="inline-flex justify-center text-red-600 text-sm mb-2">{error}</p>
+            }
+
             <InputField 
                 id="userEmail"
                 placeHolder="Email"
@@ -140,7 +247,6 @@ const SignUpLoginPage = () => {
     return (
         <div className="flex flex-col justify-center items-center m-10">
             <AppTitle isLogin={isLogin} />
-
             <div className="max-w-sm p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
                 {isLogin ?
                     <LoginCard 

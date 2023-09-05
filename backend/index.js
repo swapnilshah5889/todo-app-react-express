@@ -40,7 +40,7 @@ app.post('/userlogin', async (req, res) => {
             res.status(200).json({status: true, message: "Login Successful", userid:user._id});
         }
         else {
-            res.status(400).json({status: false, message: 'Invalid credentials'});
+            res.status(200).json({status: false, message: 'Invalid credentials'});
         }
     }
     else {
