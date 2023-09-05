@@ -16,7 +16,7 @@ function InputField(props) {
             {/* Input */}
             <input 
                 className='modal-input-text'
-                type="text"  
+                type={props.type? props.type : "text"}  
                 placeholder={props.placeHolder}
                 onChange={handleTitleChange}
                 value={props.value}
