@@ -7,7 +7,7 @@ const verifyUser = async (req, res, next) => {
     if(req.headers.username) {
         const user = await usersCollection.findOne({username: req.headers.username});
         if(user) {
-            req.userId = user.id;
+            req.userId = user._id;
             next();
         }
         else {

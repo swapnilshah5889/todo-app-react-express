@@ -8,6 +8,7 @@ import AppBar from '../../components/app-bar/AppBar';
 import { useCookies } from "react-cookie";
 import { IsUserLoggedIn, USER_COOKIE, GetUsername } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import NoDataCard from '../../components/NoDataCard/NoDataCard';
 
 const HomePage = () => {
     const [isError, setIsError] = useState(false);
@@ -227,6 +228,11 @@ const HomePage = () => {
     AppCard = <ErrorCard 
       errorButtonClick={handleTryAgainClick}
     />
+  }
+  // No Data
+  else if (state.todoJsonArr.length === 0){
+    AppCard = <NoDataCard 
+              addTodoClick={toggleAddTodoForm}/>
   }
   // Todo Card List
   else {

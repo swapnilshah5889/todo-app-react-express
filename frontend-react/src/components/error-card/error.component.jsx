@@ -1,4 +1,3 @@
-import React from 'react'
 import ErrorImage from '../../assests/error.jpg';
 import './error.styles.scss';
 import MyButton from '../button/button.component';
