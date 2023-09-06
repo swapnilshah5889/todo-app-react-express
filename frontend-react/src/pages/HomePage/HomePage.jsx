@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './HomePage.styles.scss';
 import Form from '../../components/input-form/form/form.component';
 import { useEffect, useState } from 'react';
@@ -15,7 +16,7 @@ const HomePage = () => {
     const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
-  const [cookies, setCookie, removeCookie] = useCookies([USER_COOKIE]);
+  const [cookies, , removeCookie] = useCookies([USER_COOKIE]);
   const navigate = useNavigate();
 
   // Go to login page if user not logged in
@@ -107,7 +108,7 @@ const HomePage = () => {
 
   function updateTodoListAfterDelete(id) {
     const updatedTodoList = state.todoJsonArr.filter((todo) => {
-      return todo._id != id;
+      return todo._id !== id;
     });
     setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
   };
