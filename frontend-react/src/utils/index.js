@@ -8,3 +8,11 @@ export const IsUserLoggedIn = (cookies) => {
 export const GetUsername = (cookies) => {
     return cookies.username;
 }
+
+export const LottieDefaultOptions = {
+    loop: true,
+    autoplay: true,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+};

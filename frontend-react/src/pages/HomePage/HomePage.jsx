@@ -6,14 +6,14 @@ import axios from 'axios';
 import ErrorCard from '../../components/error-card/error.component';
 import AppBar from '../../components/app-bar/AppBar';
 import { useCookies } from "react-cookie";
-import { IsUserLoggedIn, USER_COOKIE, GetUsername } from '../../utils';
+import { IsUserLoggedIn, USER_COOKIE, GetUsername, BASE_URL } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import NoDataCard from '../../components/NoDataCard/NoDataCard';
+import LoadingCard from '../../components/LoadingCard/LoadingCard';
 
 const HomePage = () => {
     const [isError, setIsError] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
-  const basePath = "http://localhost:3001";
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
   const [cookies, setCookie, removeCookie] = useCookies([USER_COOKIE]);
   const navigate = useNavigate();
@@ -44,17 +44,15 @@ const HomePage = () => {
 
   const fetchData = async () => {
     try {
-
       const username = GetUsername(cookies);
-
       const config = {
         headers: {
           username: username
         }
       }
       
-      const response = await axios.get(basePath+"/todos", config);
-      
+      const response = await axios.get(BASE_URL+"/todos", config);
+      setIsLoading(false);
       // Network Error
       if(response.status !== 200 || !response.data.status) {
         setIsError(true);
@@ -70,8 +68,6 @@ const HomePage = () => {
       }
       
       // Set Data
-      // const response = await fetch(basePath+"/todos", {method:"GET"}); 
-      // const jsonData = await response.json();
       setState(prevState => ({ ...prevState, todoJsonArr: jsonData.data, hello:true }));
       setIsError(false);
     } catch (error) {
@@ -127,7 +123,7 @@ const HomePage = () => {
         }
       }
       
-      const response = await axios.post(basePath+"/todos", JSON.stringify(todoJson), config);
+      const response = await axios.post(BASE_URL+"/todos", JSON.stringify(todoJson), config);
       
       // If error - refresh data
       if(response.status !== 200 || !response.data.status) {
@@ -154,7 +150,7 @@ const HomePage = () => {
           'Content-Type': 'application/json'
         }
       }
-      const response = await axios.delete(basePath+"/todos/"+id, config);
+      const response = await axios.delete(BASE_URL+"/todos/"+id, config);
 
       // If error - refresh data
       if(response.status !== 200 || !response.data.status) {
@@ -180,7 +176,7 @@ const HomePage = () => {
       }
       const body = {title:todoJson.title, description:todoJson.description, isDone:todoJson.isDone};
 
-      const response = await axios.put(basePath+"/todos/"+todoJson._id, JSON.stringify(body), config);
+      const response = await axios.put(BASE_URL+"/todos/"+todoJson._id, JSON.stringify(body), config);
 
       // If error - refresh data
       if(response.status !== 200 || !response.data.status) {
@@ -228,6 +224,10 @@ const HomePage = () => {
     AppCard = <ErrorCard 
       errorButtonClick={handleTryAgainClick}
     />
+  }
+  // Loading Card
+  else if(isLoading) {
+    AppCard = <LoadingCard/>
   }
   // No Data
   else if (state.todoJsonArr.length === 0){
