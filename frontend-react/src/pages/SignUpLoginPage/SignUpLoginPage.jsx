@@ -6,6 +6,8 @@ import axios from 'axios';
 import { BASE_URL, USER_COOKIE, IsUserLoggedIn } from "../../utils";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import GreetingLottie from '../../assests/todo-landing.json';
+import Lottie from "react-lottie";
 
 const LoginCard = ({registerClick, loginSuccess}) => {
     const [email, setEmail] = useState("");
@@ -97,8 +99,8 @@ const LoginCard = ({registerClick, loginSuccess}) => {
             />
 
             <div className="flex justify-end mt-1">
-                <p>New User? </p>
-                <a onClick={handleRegisterClick}
+                <p style={{fontFamily:'cursive'}}>New User? </p>
+                <a style={{fontFamily:'cursive'}} onClick={handleRegisterClick}
                 className="ml-2 font-medium text-blue-600 hover:underline">Register here</a>
             </div>
 
@@ -226,8 +228,8 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
             />
 
             <div className="flex justify-end mt-1">
-                <p>Already a User? </p>
-                <a onClick={handleLoginClick}
+                <p style={{fontFamily:'cursive'}}>Already a User? </p>
+                <a style={{fontFamily:'cursive'}} onClick={handleLoginClick}
                 className="ml-2 font-medium text-blue-600 hover:underline">Login here</a>
             </div>
 
@@ -259,6 +261,15 @@ const SignUpLoginPage = () => {
             navigate('/');
         } 
     }, []);
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: GreetingLottie,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+    };
     
     // Show the login form when user not logged in
     if(!IsUserLoggedIn(cookies)){
@@ -266,18 +277,39 @@ const SignUpLoginPage = () => {
             <div className="flex flex-col justify-center items-center m-10">
                 <AppTitle isLogin={isLogin} />
      
-                <div className="max-w-sm p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
-                    {isLogin ?
-                        <LoginCard 
-                            registerClick={() => setIsLogin(false)}
-                            loginSuccess={handleLoginSuccess}
-                        />
-                    :
-                        <SignUpCard 
-                            loginClick={() => setIsLogin(true)}
-                            loginSuccess={handleLoginSuccess}
-                        />
-                    }
+                <div className="grid grid-cols-12 w-full">
+                    
+                    {/* Greeting Card */}
+                    <div className="hidden md:block md:col-span-6">
+                        <div className="h-full flex justify-center mt-10">
+                            <div className="flex flex-col items-center">
+                                <div className="max-w-md">
+                                    <Lottie 
+                                        options={defaultOptions}
+                                    />
+                                </div>
+                                <p style={{fontFamily:'cursive'}} className='text-gray-700 font-bold text-md'>Welcome to Your Productivity Hub!</p>
+                                <p style={{fontFamily:'cursive'}} className='max-w-sm text-gray-400 text-center text-sm mt-2 mb-3 font-semibold'>Today is the day to unlock your full potential. Let's get started on your journey to success!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Login / Signup Card */}
+                    <div className="col-span-12 md:col-span-6 flex justify-center">
+                        <div className="max-w-sm p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
+                            {isLogin ?
+                                <LoginCard 
+                                    registerClick={() => setIsLogin(false)}
+                                    loginSuccess={handleLoginSuccess}
+                                />
+                            :
+                                <SignUpCard 
+                                    loginClick={() => setIsLogin(true)}
+                                    loginSuccess={handleLoginSuccess}
+                                />
+                            }
+                        </div>
+                    </div>
                 </div>
                 
             </div>

@@ -9,6 +9,7 @@
 }
 
 .modal-input-text {
+    width: 100%;
     border-radius: 5px;
     border: 0px;
     background-color: #cce1ff44;
