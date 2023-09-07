@@ -1,6 +1,7 @@
 
   
 .app-title-button {
+    white-space: nowrap;
     margin-right: 10px;
     font-size: medium;
     color: white;
@@ -47,4 +48,10 @@
 }
 .okay-btn:hover {
     background-color: #38cc38;
+}
+
+.btn-loading {
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.0);
+    opacity: 0.9;
+    cursor: not-allowed;
 }

@@ -13,6 +13,7 @@ const LoginCard = ({registerClick, loginSuccess}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");    
     const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const validateInputs = () => {
         if(email.length>0 && password.length>0)
@@ -22,6 +23,7 @@ const LoginCard = ({registerClick, loginSuccess}) => {
 
     const loginAPI = async () => {
         try {
+            setIsLoading(true);
             const data = {
                 username: email,
                 password: password
@@ -32,7 +34,7 @@ const LoginCard = ({registerClick, loginSuccess}) => {
                 }
             }
             const response = await axios.post(BASE_URL+"/userlogin", JSON.stringify(data), config);
-
+            
             // N/W error
             if(response.statusText !== 'OK') {
                 setError('Something went wrong');
@@ -48,8 +50,10 @@ const LoginCard = ({registerClick, loginSuccess}) => {
             // Login Success
             setError(undefined);
             loginSuccess(email);
+            setIsLoading(false);
 
         } catch (error) {
+            setIsLoading(false);
             if(error.response?.data?.message) {
                 setError(error.response.data.message);
                 return;
@@ -109,6 +113,8 @@ const LoginCard = ({registerClick, loginSuccess}) => {
                     btnClassName="form-button app-title-button"
                     onHandleClick={handleLogin}
                     buttonText="Login"
+                    isLoading={isLoading}
+                    loadingText="Logging in..."
                 />
             </div>
         </div>
