@@ -5,10 +5,10 @@ import React from 'react'
 
 export const AppTitle = () => {
     return (
-        <div className='flex items-center'>
+        <div className='flex items-center justify-center w-full'>
             <img className='w-8 h-8 mr-3' src={AppLogo} alt="Logo"/>
-            <div className='block'>
-                <h1 style={{fontFamily:'cursive'}} className='sm:text-2xl md:text-3xl text-purple-700'>My Todo App</h1>
+            <div className='w-auto'>
+                <p style={{fontFamily:'cursive'}} className='sm:text-3xl md:text-3xl text-purple-700'>My Todo App</p>
             </div>
         </div>
     );
