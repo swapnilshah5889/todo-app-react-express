@@ -295,8 +295,8 @@ const SignUpLoginPage = () => {
                     </div>
 
                     {/* Login / Signup Card */}
-                    <div className="col-span-12 md:col-span-6 flex justify-center">
-                        <div className="max-w-sm p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
+                    <div className="w-full col-span-12 md:col-span-6 flex justify-center">
+                        <div className="max-w-lg p-6 mt-7 rounded-xl overflow-hidden shadow-xl">
                             {isLogin ?
                                 <LoginCard 
                                     registerClick={() => setIsLogin(false)}

@@ -7,8 +7,8 @@ export const AppTitle = () => {
     return (
         <div className='flex items-center'>
             <img className='w-8 h-8 mr-3' src={AppLogo} alt="Logo"/>
-            <div className='hidden sm:block'>
-                <h1 className='h1-title'>My Todo App</h1>
+            <div className='block'>
+                <h1 style={{fontFamily:'cursive'}} className='sm:text-2xl md:text-3xl text-purple-700'>My Todo App</h1>
             </div>
         </div>
     );
