@@ -13,11 +13,13 @@ import NoDataCard from '../../components/NoDataCard/NoDataCard';
 import LoadingCard from '../../components/LoadingCard/LoadingCard';
 
 const HomePage = () => {
-    const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
   const [cookies, , removeCookie] = useCookies([USER_COOKIE]);
   const navigate = useNavigate();
+  const [isAddTodoAPI, setIsAddTodoAPI] = useState(false);
+  const [isUpdateTodoAPI, setIsUpdateTodoAPI] = useState(false);
 
   // Go to login page if user not logged in
   useEffect(() => {
@@ -67,9 +69,13 @@ const HomePage = () => {
         setIsError(true);
         return;
       }
+
+      jsonData.data.map((data, index) => {
+        return jsonData.data[index].isLoading = false;
+      })
       
       // Set Data
-      setState(prevState => ({ ...prevState, todoJsonArr: jsonData.data, hello:true }));
+      setState(prevState => ({ ...prevState, todoJsonArr: jsonData.data}));
       setIsError(false);
     } catch (error) {
       setIsError(true);
@@ -116,7 +122,7 @@ const HomePage = () => {
   // API request to add new todo
   const addTodoAPI = async (todoJson) => {
     try {
-
+      setIsAddTodoAPI(true);
       const config = {
         headers: {
           username: GetUsername(cookies),
@@ -125,6 +131,8 @@ const HomePage = () => {
       }
       
       const response = await axios.post(BASE_URL+"/todos", JSON.stringify(todoJson), config);
+      setIsAddTodoAPI(false);
+      toggleAddTodoForm();
       
       // If error - refresh data
       if(response.status !== 200 || !response.data.status) {
@@ -137,6 +145,8 @@ const HomePage = () => {
       setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
       
     } catch (error) {
+      setIsAddTodoAPI(false);
+      toggleAddTodoForm();
       fetchData();
       console.log(error);
     }
@@ -165,10 +175,22 @@ const HomePage = () => {
     }
   };
 
+  const setTodoUpdateLoading = (todoJson, status) => {
+    setIsUpdateTodoAPI(status);
+    let todoArr = state.todoJsonArr;
+    const updateTodoList = todoArr.map((todo, index) => {
+      if(todo._id === todoJson._id) {
+        todo.isLoading = status;
+      }
+      return todo;
+    })
+    setState(prevState => ({ ...prevState, todoJsonArr: updateTodoList}));
+  }
+
   // Udpate Todo API
   const updateTodoAPI = async(todoJson) => {
     try {
-
+      setTodoUpdateLoading(todoJson, true);
       const config = {
         headers: {
           username: GetUsername(cookies),
@@ -178,6 +200,7 @@ const HomePage = () => {
       const body = {title:todoJson.title, description:todoJson.description, isDone:todoJson.isDone};
 
       const response = await axios.put(BASE_URL+"/todos/"+todoJson._id, JSON.stringify(body), config);
+      setTodoUpdateLoading(todoJson, false);
 
       // If error - refresh data
       if(response.status !== 200 || !response.data.status) {
@@ -193,13 +216,13 @@ const HomePage = () => {
       setState(prevState => ({...prevState, todoJsonArr:updatedArr}));
 
     } catch (error) {
+      setTodoUpdateLoading(todoJson, false);
       fetchData();
       console.log(error);
     }
   };
 
   function handleAddTodo(todoJson) {
-    toggleAddTodoForm();
     addTodoAPI(todoJson);
   };
 
@@ -265,6 +288,7 @@ const HomePage = () => {
             onAddClick={handleAddTodo}
             formTitle="Add Todo"
             okayBtnText="Add Todo"
+            isLoading = {isAddTodoAPI}
           />
         }
   
@@ -278,6 +302,7 @@ const HomePage = () => {
             onAddClick={handleUpdateTodo}
             formTitle="Udpate Todo"
             okayBtnText="Update"
+            isLoading={isUpdateTodoAPI}
           />
         }
         

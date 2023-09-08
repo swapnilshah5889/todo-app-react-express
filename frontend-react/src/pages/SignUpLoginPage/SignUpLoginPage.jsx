@@ -34,6 +34,7 @@ const LoginCard = ({registerClick, loginSuccess}) => {
                 }
             }
             const response = await axios.post(BASE_URL+"/userlogin", JSON.stringify(data), config);
+            setIsLoading(false);
             
             // N/W error
             if(response.statusText !== 'OK') {
@@ -50,7 +51,6 @@ const LoginCard = ({registerClick, loginSuccess}) => {
             // Login Success
             setError(undefined);
             loginSuccess(email);
-            setIsLoading(false);
 
         } catch (error) {
             setIsLoading(false);
@@ -126,6 +126,8 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
     const [password, setPassword] = useState("");
     const [confPassword, setConfPassword] = useState("");
     const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+
     const validateInputs = () => {
         if(email.length>0 && password.length>0) {
 
@@ -142,6 +144,7 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
 
     const signupAPI = async () => {
         try {
+            setIsLoading(true);
             const data = {
                 username: email,
                 password: password
@@ -153,7 +156,7 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
             }
 
             const response = await axios.post(BASE_URL+"/signup", JSON.stringify(data), config);
-
+            setIsLoading(false);
             // N/W error
             if(response.statusText !== 'OK') {
                 setError(response.data.message);
@@ -171,6 +174,7 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
             loginSuccess(email);
 
         } catch (error) {
+            setIsLoading(false);
             if(error.response?.data?.message) {
                 setError(error.response.data.message);
                 return;
@@ -244,6 +248,8 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
                     btnClassName="form-button app-title-button"
                     onHandleClick={handleSignUp}
                     buttonText="Register"
+                    isLoading={isLoading}
+                    loadingText="Signing up..."
                 />
             </div>
         </div>

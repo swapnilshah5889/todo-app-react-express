@@ -1,19 +1,39 @@
-import './todo-card.styles.css'
-import deleteImg from '../../assests/delete.svg'
-import editImg from '../../assests/edit.png'
+import './todo-card.styles.css';
+import deleteImg from '../../assests/delete.svg';
+import editImg from '../../assests/edit.png';
+import Lottie from 'react-lottie';
+import LoaderLottie from '../../assests/blue-spinner.json';
 
 
-const CheckBox = ({isChecked=false, onCheckBoxChange}) => {
+const CheckBox = ({isChecked=false, onCheckBoxChange , isLoading}) => {
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: LoaderLottie,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+    };
 
     return (
-        <input 
-            checked={isChecked} 
-            onChange={onCheckBoxChange}
-            type="checkbox" 
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 
-            dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 
-            dark:border-gray-600">
-        </input>
+        <div>
+            {isLoading?
+                <div className='w-4 h-4'>
+                    <Lottie 
+                        options={defaultOptions}
+                    />
+                </div>
+                :
+                <input 
+                    checked={isChecked} 
+                    onChange={onCheckBoxChange}
+                    type="checkbox" 
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 
+                    dark:border-gray-600">
+                </input>
+            }
+        </div>
     );
 
 }
@@ -69,6 +89,7 @@ function TodoCard({todoData, onDeleteClick, onEditClick, onStatusChange}) {
                     <CheckBox 
                         isChecked={todoData.isDone}
                         onCheckBoxChange={onCheckBoxChange}
+                        isLoading={todoData.isLoading}
                     />
                 </div>
             </div>

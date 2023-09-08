@@ -14,7 +14,8 @@ function CardList(props) {
 
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {toDoList.map((todoJson) => (
+            {toDoList.map((todoJson, index) => {
+                return (
                 <TodoCard 
                     key={todoJson._id}
                     todoData={todoJson}
@@ -22,7 +23,7 @@ function CardList(props) {
                     onEditClick={handleEdit}
                     onStatusChange={props.onStatusChange}
                 />
-            ))}
+            );})}
         </div>
     );
 }

@@ -2,7 +2,7 @@ import './button.styles.css';
 import LoadingLottie from '../../assests/btn-loader.json';
 import Lottie from 'react-lottie';
 
-const LoadingButton = ({buttonText, isLoading}) => {
+const LoadingButton = ({buttonText, showLoader}) => {
 
     const defaultOptions = {
         loop: true,
@@ -15,7 +15,7 @@ const LoadingButton = ({buttonText, isLoading}) => {
 
     return (
         <div className='flex items-center justify-center'>
-            {isLoading && 
+            {showLoader &&
                 <div className='w-5 h-5 mr-2'>
                     <Lottie 
                         options={defaultOptions}
@@ -27,8 +27,11 @@ const LoadingButton = ({buttonText, isLoading}) => {
     );
 }
 
-function MyButton({btnClassName, buttonText, onHandleClick ,isLoading=false, loadingText="Loading..."}) {
+function MyButton({btnClassName, buttonText, onHandleClick ,isLoading=false, loadingText, showLoader=true}) {
 
+    if(!loadingText) {
+        loadingText = buttonText;
+    }
     const btnClass = isLoading? btnClassName+" btn-loading" : btnClassName;
     function handleButtonClick() {
         if(!isLoading) {
@@ -38,7 +41,10 @@ function MyButton({btnClassName, buttonText, onHandleClick ,isLoading=false, loa
     return (
         <div className="app-title-button-ctn">
         <button className={`app-title-button ${btnClass}`} onClick={handleButtonClick}>
-            <LoadingButton isLoading={isLoading} buttonText={!isLoading? buttonText : loadingText} /> 
+            <LoadingButton 
+                buttonText={!isLoading? buttonText : loadingText} 
+                showLoader={showLoader && isLoading}
+            /> 
         </button>
         </div>
     )

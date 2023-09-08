@@ -4,13 +4,13 @@ import InputField from '../input-field/input-field.component';
 import MyButton from '../../button/button.component';
 import InputArea from '../input-text-area/input-text-area.component';
 
-function Form(props){
+function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okayBtnText}){
 
     const [state, setState] = useState({
-        todoId:props.todoJson._id,
-        todoTitle:props.todoJson.title,
-        todoDesc:props.todoJson.description,
-        todoIsDone : props.todoJson.isDone
+        todoId:todoJson._id,
+        todoTitle:todoJson.title,
+        todoDesc:todoJson.description,
+        todoIsDone : todoJson.isDone
     });
 
     function handleTitleChange(title) {
@@ -25,9 +25,9 @@ function Form(props){
         // Valid todo
         if(state.todoDesc && state.todoTitle &&
             state.todoDesc.length > 0 && state.todoTitle.length > 0) {
-            let todoJson = {_id:props.todoJson._id, title:state.todoTitle, 
+            let newTodoJson = {_id:todoJson._id, title:state.todoTitle, 
                 description:state.todoDesc, isDone:state.todoIsDone};
-            props.onAddClick(todoJson);
+            onAddClick(newTodoJson);
         }
         else {
             alert("Invalid Todo!");
@@ -35,10 +35,10 @@ function Form(props){
     }
 
     return(
-        <div className={`modal ${props.isOpen ? 'open' : ''}`}>
+        <div className={`modal ${isOpen ? 'open' : ''}`}>
             <div className="modal-content">
                 
-                <h3 className='modal-title'>{props.formTitle}</h3>
+                <h3 className='modal-title'>{formTitle}</h3>
 
                 {/* Title */}
                 <InputField 
@@ -63,13 +63,17 @@ function Form(props){
                 <div className='button-container'>
                     <MyButton 
                         btnClassName="form-button cancel-btn"
-                        onHandleClick={props.onClose}
+                        onHandleClick={onClose}
                         buttonText="Close"
+                        isLoading={isLoading}
+                        showLoader={false}
                     />
                     <MyButton 
                         btnClassName="form-button okay-btn"
                         onHandleClick={handleAddTodo}
-                        buttonText={props.okayBtnText}
+                        buttonText={okayBtnText}
+                        isLoading={isLoading}
+                        loadingText="Adding todo..."
                     />
                 </div>
             </div>
