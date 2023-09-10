@@ -2,6 +2,7 @@ import express from 'express';
 import { todosCollection, usersCollection } from './db/index.js';
 import Middleware from './middleware/index.js';
 import cors from 'cors';
+import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 app.use(express.json());
@@ -22,12 +23,12 @@ app.use(cors(
 
 
 // Sign up user
-app.post('/signup', Middleware.verifyNewUser, async (req, res) => {
+app.post('/signup', Middleware.verifyNewUser, async (req: Request, res: Response) => {
     const userJson = {
         username: req.body.username,
         password: req.body.password
     }
-    const newUser = await usersCollection(userJson); 
+    const newUser = new usersCollection(userJson); 
     await newUser.save();
     if(newUser) {
         res.status(200).json({status: true, data: newUser});
@@ -38,7 +39,7 @@ app.post('/signup', Middleware.verifyNewUser, async (req, res) => {
 });
 
 // Login user
-app.post('/userlogin', async (req, res) => {
+app.post('/userlogin', async (req: Request, res: Response) => {
     if(req.body.username && req.body.password) {
         const user = await usersCollection.findOne({username: req.body.username, password: req.body.password});
         if(user) {
@@ -55,8 +56,8 @@ app.post('/userlogin', async (req, res) => {
 });
 
 // Get all user todos
-app.get('/todos', Middleware.verifyUser, async (req, res) => {
-    const todos = await todosCollection.find({userId: req.userId});
+app.get('/todos', Middleware.verifyUser, async (req: Request, res: Response) => {
+    const todos = await todosCollection.find({userId: req.headers['userId']});
     if(todos) {
         res.status(200).json({status:true, data:todos});
     }
@@ -66,7 +67,7 @@ app.get('/todos', Middleware.verifyUser, async (req, res) => {
 });
 
 // Add Todo
-app.post('/todos', Middleware.verifyUser, async (req, res) => {
+app.post('/todos', Middleware.verifyUser, async (req: Request, res: Response) => {
 
     try {
         const todoJson = {
@@ -74,10 +75,10 @@ app.post('/todos', Middleware.verifyUser, async (req, res) => {
             description: req.body.description,
             isDone: false,
             date: new Date().toISOString(),
-            userId: req.userId
+            userId: req.headers['userId']
         };
-        const newTodo = await todosCollection(todoJson);
-        newTodo.save();
+        const newTodo = new todosCollection(todoJson);
+        await newTodo.save();
         res.status(200).json({status:true, data:newTodo});
     } catch (error) {
         res.status(500).json({status:false, message:'Something went wrong'});
@@ -86,21 +87,18 @@ app.post('/todos', Middleware.verifyUser, async (req, res) => {
 });
 
 // Update Todo
-app.put('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req, res) => {
+app.put('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req: Request, res: Response) => {
 
     try {
-        if(req.body.title) {
-            req.todo.title = req.body.title; 
-        }
-        if(req.body.description) {
-            req.todo.description = req.body.description; 
-        }
-        if('isDone' in req.body) {
-            req.todo.isDone = req.body.isDone; 
+        
+        const newTodo = {
+            title: req.body.title,
+            description: req.body.description,
+            isDone: req.body.isDone
         }
         const updatedTodo = await todosCollection.findOneAndUpdate(
             { _id: req.params.id },
-            req.todo,
+            newTodo,
             { new: true }
         );
         if(updatedTodo) {
@@ -116,15 +114,11 @@ app.put('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req, 
 });
 
 // Delete Todo
-app.delete('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req, res) => {
+app.delete('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (req: Request, res: Response) => {
     try {
-        if(req.userId == req.todo.userId) {
-            const todo = await todosCollection.findByIdAndDelete(req.todo._id);
-            res.status(200).json({status:true, message: 'Todo deleted successfully'});
-        }
-        else {
-            res.status(500).json({status: false, message: 'Invalid Request'});
-        }
+        
+        const todo = await todosCollection.findByIdAndDelete(req.headers['todoId']);
+        res.status(200).json({status:true, message: 'Todo deleted successfully'});
 
     } catch (error) {
         res.status(500).json({status: false, message: 'Something went wrong'});
@@ -132,7 +126,7 @@ app.delete('/todos/:id', Middleware.verifyUser, Middleware.verifyTodo, async (re
 });
 
 //for all other routes, return 404
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).send();
 });
 
