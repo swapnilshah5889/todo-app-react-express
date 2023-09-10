@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors(
     {
-        origin: 'https://todo-app-swapnilshah.netlify.app'
+        origin: ['https://todo-app-swapnilshah.netlify.app', 'http://3.144.31.71:3000']
     }
 ));
 
