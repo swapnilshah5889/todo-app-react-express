@@ -256,6 +256,10 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
     );
 }
 
+const OTPCard = () => {
+        
+}
+
 const SignUpLoginPage = () => {
 
     const [isLogin, setIsLogin] = useState(true);

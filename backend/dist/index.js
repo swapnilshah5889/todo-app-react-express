@@ -19,7 +19,7 @@ const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: 'https://todo-app-swapnilshah.netlify.app'
+    origin: ['https://todo-app-swapnilshah.netlify.app', 'http://3.144.31.71', 'http://localhost:3000']
 }));
 // // Cors routes
 // app.use((req, res, next) => {
@@ -29,35 +29,43 @@ app.use((0, cors_1.default)({
 //   res.setHeader('Access-Control-Allow-Credentials', true);
 //   next();
 // })
+const getOtp = () => {
+    const minutes = 10;
+    return [Math.floor(100000 + Math.random() * 900000), new Date().getTime() + minutes * 60000];
+};
 // Sign up user
 app.post('/signup', index_js_2.default.verifyNewUser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const [otp, otpExpire] = getOtp();
     const userJson = {
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        otp: otp,
+        otpExpire: otpExpire,
     };
     const newUser = new index_js_1.usersCollection(userJson);
     yield newUser.save();
     if (newUser) {
-        res.status(200).json({ status: true, data: newUser });
+        res.status(200).json({ status: true, data: { username: newUser.username } });
     }
     else {
         res.status(500).json({ status: false, message: 'Something went wrong' });
     }
 }));
+app.post('/verifyuser', index_js_2.default.verifyUserRegistration, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200).json({ status: true, message: "Verify user registration successful" });
+}));
 // Login user
-app.post('/userlogin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.body.username && req.body.password) {
-        const user = yield index_js_1.usersCollection.findOne({ username: req.body.username, password: req.body.password });
-        if (user) {
-            res.status(200).json({ status: true, message: "Login Successful", userid: user._id });
-        }
-        else {
-            res.status(200).json({ status: false, message: 'Invalid credentials' });
-        }
+app.post('/userlogin', index_js_2.default.verifyUserLogin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.body.userVerified) {
+        res.status(200).json({ status: true, data: { redirectTo: "HOME" }, message: "Login Successful" });
     }
     else {
-        console.log(req.body.username, req.body.password);
-        res.status(400).json({ status: false, message: 'Invalid parameters' });
+        const [otp, otpExpire] = getOtp();
+        yield index_js_1.usersCollection.findOneAndUpdate({ _id: req.body.userId }, {
+            otp: otp,
+            otpExpire: otpExpire
+        });
+        res.status(200).json({ status: true, data: { redirectTo: "OTP" }, message: "OTP Sent Successfully" });
     }
 }));
 // Get all user todos

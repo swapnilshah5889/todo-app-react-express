@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors(
     {
-        origin: ['https://todo-app-swapnilshah.netlify.app', 'http://3.144.31.71']
+        origin: ['https://todo-app-swapnilshah.netlify.app', 'http://3.144.31.71', 'http://localhost:3000']
     }
 ));
 
@@ -22,37 +22,55 @@ app.use(cors(
 // })
 
 
+const getOtp = () => {
+    const minutes = 10;
+    return [Math.floor(100000 + Math.random() * 900000), new Date().getTime() + minutes*60000];
+}
+
 // Sign up user
 app.post('/signup', Middleware.verifyNewUser, async (req: Request, res: Response) => {
+    const [otp, otpExpire] = getOtp();
     const userJson = {
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        otp : otp,
+        otpExpire : otpExpire,
     }
     const newUser = new usersCollection(userJson); 
     await newUser.save();
     if(newUser) {
-        res.status(200).json({status: true, data: newUser});
+        res.status(200).json({status: true, data: {username: newUser.username}});
     }
     else {
         res.status(500).json({status: false, message: 'Something went wrong'});
     }
 });
 
+
+app.post('/verifyuser', Middleware.verifyUserRegistration, async (req: Request, res: Response) => {
+    res.status(200).json({status: true, message:"Verify user registration successful"});
+});
+
 // Login user
-app.post('/userlogin', async (req: Request, res: Response) => {
-    if(req.body.username && req.body.password) {
-        const user = await usersCollection.findOne({username: req.body.username, password: req.body.password});
-        if(user) {
-            res.status(200).json({status: true, message: "Login Successful", userid:user._id});
-        }
-        else {
-            res.status(200).json({status: false, message: 'Invalid credentials'});
-        }
+app.post('/userlogin', Middleware.verifyUserLogin,  async (req: Request, res: Response) => {
+
+    if(req.body.userVerified){
+        res.status(200).json({status: true,  data: {redirectTo: "HOME"}, message: "Login Successful"});
     }
     else {
-        console.log(req.body.username, req.body.password);
-        res.status(400).json({status: false, message: 'Invalid parameters'});
+        const [otp, otpExpire] = getOtp();
+        await usersCollection.findOneAndUpdate(
+            { _id: req.body.userId },
+            {
+                otp: otp, 
+                otpExpire:otpExpire 
+            }
+        );
+
+        res.status(200).json({status: true, data: {redirectTo: "OTP"}, message:"OTP Sent Successfully"});
+    
     }
+
 });
 
 // Get all user todos
