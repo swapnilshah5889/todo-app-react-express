@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors(
     {
         origin: ['https://todo-app-swapnilshah.netlify.app', 'http://3.144.31.71', 'http://localhost:3000', 
-                'http://localhost:5173']
+                'http://localhost:5173', 'https://todo-app-react-express.vercel.app']
     }
 ));
 
