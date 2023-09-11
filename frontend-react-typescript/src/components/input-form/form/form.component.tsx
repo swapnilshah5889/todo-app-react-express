@@ -3,21 +3,23 @@ import './form.styles.css';
 import InputField from '../input-field/input-field.component';
 import MyButton from '../../button/button.component';
 import InputArea from '../input-text-area/input-text-area.component';
-import { Todo } from '../../../types';
+import { Todo, NewTodo } from '../../../types';
 
 type FormProps = {
     todoJson: Partial<Todo>, 
     isLoading: boolean,
-    onAddClick: (newTodoJson: Todo) => void,
+    isAdd: boolean,
+    onAddClick?: (newTodoJson: NewTodo) => void,
+    onUpdateClick?: (newTodoJson: Todo) => void,
     isOpen: boolean,
     formTitle: string,
     onClose: () => void,
     okayBtnText: string,
 }
 
-function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okayBtnText}: FormProps){
+function Form({todoJson, isLoading, onAddClick, onUpdateClick, isAdd, isOpen, formTitle, onClose, okayBtnText}: FormProps){
 
-    const [state, setState] = useState({
+    const [state, setState] = useState<{todoId?:string, todoTitle?: string, todoDesc?: string, todoIsDone?:boolean}>({
         todoId:todoJson._id,
         todoTitle:todoJson.title,
         todoDesc:todoJson.description,
@@ -36,9 +38,20 @@ function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okay
         // Valid todo
         if(state.todoDesc && state.todoTitle &&
             state.todoDesc.length > 0 && state.todoTitle.length > 0) {
-            const newTodoJson: Todo = {_id:todoJson._id, title:state.todoTitle, 
-                description:state.todoDesc, isDone:state.todoIsDone};
-            onAddClick(newTodoJson);
+            if(isAdd && onAddClick) {
+                const newTodoJson: NewTodo = {title:state.todoTitle, 
+                    description:state.todoDesc, isDone:state.todoIsDone};
+                onAddClick(newTodoJson);
+            }
+            else if(!isAdd && onUpdateClick && state.todoId) {
+                const newTodoJson: Todo = {_id:state.todoId, title:state.todoTitle, 
+                    description:state.todoDesc, isDone:state.todoIsDone};
+                onUpdateClick(newTodoJson)
+            }
+            else {
+                onClose();
+                alert("Something Went Wrong");
+            }
         }
         else {
             alert("Invalid Todo!");
