@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import NoDataCard from '../../components/NoDataCard/NoDataCard';
 import LoadingCard from '../../components/LoadingCard/LoadingCard';
 import { Cookies } from '../../utils/types';
-import { Todo } from '../../types';
+import { NewTodo, Todo } from '../../types';
 
 type HomePageState = {
   isAddTodoOpen: boolean,
@@ -80,7 +80,8 @@ const HomePage = () => {
       }
 
       jsonData.data.map((data: Todo, index: number) => {
-        return jsonData.data[index].isLoading = false;
+        data.isLoading = false;
+        return jsonData.data[index] = data;
       })
       
       // Set Data
@@ -129,7 +130,7 @@ const HomePage = () => {
   }
 
   // API request to add new todo
-  const addTodoAPI = async (todoJson: Todo) => {
+  const addTodoAPI = async (todoJson: NewTodo) => {
     try {
       setIsAddTodoAPI(true);
       const config = {
@@ -231,7 +232,7 @@ const HomePage = () => {
     }
   };
 
-  function handleAddTodo(todoJson: Todo) {
+  function handleAddTodo(todoJson: NewTodo) {
     addTodoAPI(todoJson);
   }
 
@@ -291,6 +292,7 @@ const HomePage = () => {
         {
           state.isAddTodoOpen && 
           <Form 
+            isAdd = {true}
             isOpen={state.isAddTodoOpen}
             todoJson={{}}
             onClose={toggleAddTodoForm}
@@ -305,10 +307,11 @@ const HomePage = () => {
         {
           state.isEditTodoOpen && 
           <Form 
+            isAdd = {false}
             isOpen={state.isEditTodoOpen}
             todoJson={state.updateJson}
             onClose={toggleUpdateTodoForm}
-            onAddClick={handleUpdateTodo}
+            onUpdateClick={handleUpdateTodo}
             formTitle="Udpate Todo"
             okayBtnText="Update"
             isLoading={isUpdateTodoAPI}
