@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/react-cookies": "^0.1.0",
     "dotenv": "^16.3.1"
   }
 }

@@ -21,7 +21,10 @@ const todoSchema = new Schema({
 ;
 const userSchema = new Schema({
     username: { type: String },
-    password: { type: String }
+    password: { type: String },
+    isVerified: { type: Boolean, default: false },
+    otp: { type: String, required: true },
+    otpExpire: { type: Number }
 });
 if (MongoURL) {
     mongoose_1.default.connect(MongoURL);

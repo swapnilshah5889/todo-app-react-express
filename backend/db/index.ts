@@ -26,16 +26,23 @@ const todoSchema = new Schema<ITodo>(
 interface IUser extends Document {
     _id: String,
     username: String,
-    password: String
+    password: String,
+    isVerified: Boolean,
+    otp : Number,
+    otpExpire: Number,
 };
 
 
 const userSchema = new Schema<IUser> (
     {
         username: { type: String},
-        password: { type: String}
+        password: { type: String},
+        isVerified : { type: Boolean, default:false},
+        otp: { type: String, required: true},
+        otpExpire: { type: Number}
     }
 );
+
 
 if(MongoURL) {
     mongoose.connect(MongoURL);

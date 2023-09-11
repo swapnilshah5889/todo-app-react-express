@@ -32,6 +32,48 @@ const verifyUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         res.status(401).json({ status: false, message: 'Username required' });
     }
 });
+// Verify If User Exists
+const verifyUserLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.body.username && req.body.password) {
+        const user = yield index_js_1.usersCollection.findOne({ username: req.body.username, password: req.body.password });
+        if (user) {
+            req.body.userVerified = user.isVerified;
+            req.body.userId = user._id;
+            next();
+        }
+        else {
+            res.status(200).json({ status: false, message: 'Invalid credentials' });
+        }
+    }
+    else {
+        console.log(req.body.username, req.body.password);
+        res.status(400).json({ status: false, message: 'Invalid parameters' });
+    }
+});
+// Verify If User Registration
+const verifyUserRegistration = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // If username and otp exists
+    if (req.body.username && req.body.otp) {
+        // If username available
+        const user = yield index_js_1.usersCollection.findOne({ username: req.body.username });
+        if (user) {
+            if (req.body.otp === user.otp && (new Date().getTime() < user.otpExpire)) {
+                user.isVerified = true;
+                yield index_js_1.usersCollection.findOneAndUpdate({ _id: user._id }, user);
+                next();
+            }
+            else {
+                res.status(401).json({ status: false, message: 'Invalid OTP or OTP Expired' });
+            }
+        }
+        else {
+            res.status(401).json({ status: false, message: 'Invalid username' });
+        }
+    }
+    else {
+        res.status(500).json({ status: false, message: 'Invalid Data' });
+    }
+});
 const verifyTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (mongoose_1.default.Types.ObjectId.isValid(req.params.id)) {
@@ -65,6 +107,8 @@ const verifyNewUser = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 const Middleware = {
     verifyUser,
     verifyTodo,
-    verifyNewUser
+    verifyNewUser,
+    verifyUserRegistration,
+    verifyUserLogin
 };
 exports.default = Middleware;
