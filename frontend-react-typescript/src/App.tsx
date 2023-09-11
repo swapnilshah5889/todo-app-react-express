@@ -1,23 +1,17 @@
 import './App.css'
 import { CookiesProvider } from 'react-cookie'
 import { Route, Routes } from 'react-router-dom'
+import SignUpLoginPage from './pages/SignUpLoginPage/SignUpLoginPage'
+import HomePage from './pages/HomePage/HomePage'
 
-const HomePage = () => {
+const TempCard = () => {
+
   return (
-    <div>
-      <p> HomePage </p>
+    <div className='w-10 h10 bg-red-500'>
+      Hello
     </div>
   );
 }
-
-const SignUpLoginPage = () => {
-  return (
-    <div>
-      SignUpLoginPage
-    </div>
-  );
-}
-
 function App() {
 
   return (

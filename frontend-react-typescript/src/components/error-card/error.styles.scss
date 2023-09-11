@@ -1,0 +1,40 @@
+.div-error-cont {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .img-error {
+        margin: 10px;
+        object-fit: contain;
+        max-height: 350px;
+        max-width: 350px;
+    }
+
+    .error-title {
+        color: #555;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .error-text {
+        color: #555;
+        font-size: 15px;
+        font-weight: 300;
+        max-width: 350px;
+    }
+
+    .error-button {
+        margin: 5px;
+        padding: 8px 15px 8px 15px;
+        border:0px;
+        font-size: 16px;
+        background-color: #8A2BE2;
+        color: white;
+        border-radius: 20px;
+    }
+
+    .error-button:hover {
+        background-color: #9c32ff;
+    }
+}

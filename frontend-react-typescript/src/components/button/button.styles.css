@@ -1,0 +1,57 @@
+
+  
+.app-title-button {
+    white-space: nowrap;
+    margin-right: 10px;
+    font-size: medium;
+    color: white;
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.2);
+    background-color: #8A2BE2;
+    transition: all 0.2s ease;
+}
+
+.app-title-button:hover {
+    box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #9c32ff;
+}
+
+.form-button {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-size: 15px;
+    color: white;
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.form-button:hover {
+    box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn {
+    background-color: #ff5555;
+}
+.cancel-btn:hover {
+    background-color: #ff3838;
+}
+.okay-btn {
+    background-color: #38bb38;
+}
+.okay-btn:hover {
+    background-color: #38cc38;
+}
+
+.btn-loading {
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.0);
+    opacity: 0.9;
+    cursor: not-allowed;
+}
