@@ -8,11 +8,13 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import GreetingLottie from '../../assets/todo-landing.json';
 import Lottie from "react-lottie";
+import { AxiosError } from 'axios';
+import { LoginCardProps, SignupCardProps } from "./types";
 
-const LoginCard = ({registerClick, loginSuccess}) => {
+const LoginCard = ({registerClick, loginSuccess}: LoginCardProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");    
-    const [error, setError] = useState();
+    const [error, setError] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
 
     const validateInputs = () => {
@@ -54,7 +56,7 @@ const LoginCard = ({registerClick, loginSuccess}) => {
 
         } catch (error) {
             setIsLoading(false);
-            if(error.response?.data?.message) {
+            if(error instanceof AxiosError && error.response?.data?.message) {
                 setError(error.response.data.message);
                 return;
             }
@@ -62,11 +64,11 @@ const LoginCard = ({registerClick, loginSuccess}) => {
         }
     }
     
-    const handleEmailChange = (email) => {
+    const handleEmailChange = (email: string) => {
         setEmail(email);
     };
     
-    const handlePasswordChange = (password) => {
+    const handlePasswordChange = (password: string) => {
         setPassword(password);
     };
 
@@ -87,14 +89,12 @@ const LoginCard = ({registerClick, loginSuccess}) => {
                 <p className="inline-flex justify-center text-red-600 text-sm mb-2">{error}</p>
             }
             <InputField 
-                id="userEmail"
                 placeHolder="Email"
                 onValueChange={handleEmailChange}
                 value={email}
                 label="Email"
             />
             <InputField 
-                id="userPassword"
                 placeHolder="Password"
                 onValueChange={handlePasswordChange}
                 value={password}
@@ -121,11 +121,11 @@ const LoginCard = ({registerClick, loginSuccess}) => {
     );
 }
 
-const SignUpCard = ({loginClick, loginSuccess}) => {
+const SignUpCard = ({loginClick, loginSuccess}: SignupCardProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confPassword, setConfPassword] = useState("");
-    const [error, setError] = useState();
+    const [error, setError] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
 
     const validateInputs = () => {
@@ -175,7 +175,7 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
 
         } catch (error) {
             setIsLoading(false);
-            if(error.response?.data?.message) {
+            if(error instanceof AxiosError && error.response?.data?.message) {
                 setError(error.response.data.message);
                 return;
             }
@@ -183,15 +183,15 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
         }
     }
     
-    const handleEmailChange = (email) => {
+    const handleEmailChange = (email: string) => {
         setEmail(email);
     };
     
-    const handlePasswordChange = (password) => {
+    const handlePasswordChange = (password: string) => {
         setPassword(password);
     };
     
-    const handleConfPasswordChange = (password) => {
+    const handleConfPasswordChange = (password: string) => {
         setConfPassword(password);
     };
 
@@ -214,14 +214,12 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
             }
 
             <InputField 
-                id="userEmail"
                 placeHolder="Email"
                 onValueChange={handleEmailChange}
                 value={email}
                 label="Email"
             />
             <InputField 
-                id="userPassword"
                 placeHolder="Password"
                 onValueChange={handlePasswordChange}
                 value={password}
@@ -229,7 +227,6 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
                 label="Password"
             />
             <InputField 
-                id="userConfPassword"
                 placeHolder="Confirm Password"
                 onValueChange={handleConfPasswordChange}
                 value={confPassword}
@@ -256,10 +253,6 @@ const SignUpCard = ({loginClick, loginSuccess}) => {
     );
 }
 
-const OTPCard = () => {
-        
-}
-
 const SignUpLoginPage = () => {
 
     const [isLogin, setIsLogin] = useState(true);
@@ -267,7 +260,7 @@ const SignUpLoginPage = () => {
     const navigate = useNavigate();
 
 
-    const handleLoginSuccess = (email) => {
+    const handleLoginSuccess = (email: string) => {
         setCookie('username', email, { path: '/' })
         navigate('/');
     }
@@ -291,7 +284,7 @@ const SignUpLoginPage = () => {
     if(!IsUserLoggedIn(cookies)){
         return (
             <div className="flex flex-col justify-center items-center m-10">
-                <AppTitle isLogin={isLogin} />
+                <AppTitle />
      
                 <div className="grid grid-cols-12 w-full">
                     

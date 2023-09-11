@@ -3,7 +3,11 @@ import './error.styles.scss';
 import MyButton from '../button/button.component';
 import Lottie from 'react-lottie';
 
-const ErrorCard = ({errorButtonClick}) => {
+type ErrorCardProps = {
+  errorButtonClick: () => void
+}
+
+const ErrorCard = ({errorButtonClick}: ErrorCardProps) => {
   const defaultOptions = {
     loop: true,
     autoplay: true,

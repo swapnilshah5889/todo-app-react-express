@@ -19,9 +19,6 @@
 
 .card-title-ctn {
   background-color: #dfeaff;
-  display: grid;
-  place-items: center;
-  grid-template-columns: 6fr 1fr 1fr;
   margin: 0px;
   padding-top: 3px;
   padding-bottom: 3px;
@@ -30,9 +27,6 @@
 }
 
 .card-title-text {
-  margin: 5px;
-  margin-left: 35px;
-  width: 100%;
   font-family: cursive;
   font-size: 16px;
   color: #222;

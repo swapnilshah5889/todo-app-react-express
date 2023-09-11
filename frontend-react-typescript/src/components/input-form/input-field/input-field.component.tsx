@@ -1,9 +1,17 @@
 import '../input-field.styles.css';
 
-function InputField(props) {
+type InputFieldProps = {
+    label: string,
+    type?: string,
+    placeHolder?: string,
+    value?: string,
+    onValueChange: (value: string) => void
+}
+
+function InputField(props: InputFieldProps) {
 
 
-    function handleTitleChange(event) {
+    function handleTitleChange(event : React.ChangeEvent<HTMLInputElement>) {
         props.onValueChange(event.target.value);
     }
 
@@ -11,7 +19,7 @@ function InputField(props) {
         <div>
             
             {/* Title */}
-            <label className='modal-input-label' for="todoTitle">{props.label}</label><br></br>
+            <label className='modal-input-label'>{props.label}</label><br></br>
             
             {/* Input */}
             <input 

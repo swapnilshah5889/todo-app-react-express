@@ -1,4 +1,3 @@
-import React from "react";
 import LoaderAnimation from '../../assets/loader.json';
 import Lottie from 'react-lottie';
 

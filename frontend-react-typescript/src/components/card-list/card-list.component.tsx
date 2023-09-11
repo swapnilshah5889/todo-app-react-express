@@ -1,20 +1,28 @@
 import TodoCard from "../todo-card/todo-card.component";
+import { Todo } from "../../types";
 
-function CardList(props) {
+type CardListProps = {
+    toDoList: Todo[],
+    onDeleteClick: (id: string) => void,
+    onEditClick: (todoJson: Todo) => void,
+    onStatusChange: (todoJson: Todo) => void,
+}
+
+function CardList(props: CardListProps) {
 
     const {toDoList} = props;
     
-    function handleDelete(id) {
+    function handleDelete(id: string) {
         props.onDeleteClick(id);
     }
 
-    function handleEdit(todoJson) {
+    function handleEdit(todoJson: Todo) {
         props.onEditClick(todoJson);
     }
 
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {toDoList.map((todoJson, index) => {
+            {toDoList.map((todoJson: Todo) => {
                 return (
                 <TodoCard 
                     key={todoJson._id}

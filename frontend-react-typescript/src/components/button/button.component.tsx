@@ -1,8 +1,9 @@
 import './button.styles.css';
 import LoadingLottie from '../../assets/btn-loader.json';
 import Lottie from 'react-lottie';
+import { MyButtonProps, LoadinButtonProps } from './types';
 
-const LoadingButton = ({buttonText, showLoader}) => {
+const LoadingButton = ({buttonText, showLoader} : LoadinButtonProps) => {
 
     const defaultOptions = {
         loop: true,
@@ -27,7 +28,7 @@ const LoadingButton = ({buttonText, showLoader}) => {
     );
 }
 
-function MyButton({btnClassName, buttonText, onHandleClick ,isLoading=false, loadingText, showLoader=true}) {
+function MyButton({btnClassName, buttonText, onHandleClick ,isLoading=false, loadingText, showLoader=true}: MyButtonProps) {
 
     if(!loadingText) {
         loadingText = buttonText;

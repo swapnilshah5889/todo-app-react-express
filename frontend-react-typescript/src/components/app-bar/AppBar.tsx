@@ -1,7 +1,7 @@
 import MyButton from '../button/button.component';
 import { useMediaQuery } from 'react-responsive'
 import AppLogo from '../../assets/todo-logo.png';
-import React from 'react'
+import { AppBarProps } from './types';
 
 export const AppTitle = () => {
     return (
@@ -14,7 +14,7 @@ export const AppTitle = () => {
     );
 }
 
-const AppBar = ({toggleAddTodoForm, onLogoutClick}) => {
+const AppBar = ({toggleAddTodoForm, onLogoutClick}: AppBarProps) => {
 
     const isTabletOrMobile = useMediaQuery({ maxWidth: 640 })  
     return (

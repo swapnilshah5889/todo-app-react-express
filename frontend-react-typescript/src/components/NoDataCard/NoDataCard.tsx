@@ -1,17 +1,19 @@
 import MyButton from '../button/button.component';
-import { LottieDefaultOptions } from '../../utils';
+import { getLottieDefaultOptions } from '../../utils';
 import NoDataLottie from '../../assets/no-data.json';
 import Lottie from 'react-lottie';
+import { AddTodoCardProps } from './types';
 
-const NoDataCard = ({addTodoClick}) => {
+
+const NoDataCard = ({addTodoClick}: AddTodoCardProps) => {
   
-  LottieDefaultOptions['animationData'] = NoDataLottie;
-
+  const lottieOptions = getLottieDefaultOptions(NoDataLottie);
+  
   return (
     <div className='div-error-cont'>
         <div className="max-w-xs">
             <Lottie 
-                options={LottieDefaultOptions}
+                options={lottieOptions}
             />
         </div>
 

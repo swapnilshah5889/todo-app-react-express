@@ -11,6 +11,15 @@ import { IsUserLoggedIn, USER_COOKIE, GetUsername, BASE_URL } from '../../utils'
 import { useNavigate } from 'react-router-dom';
 import NoDataCard from '../../components/NoDataCard/NoDataCard';
 import LoadingCard from '../../components/LoadingCard/LoadingCard';
+import { Cookies } from '../../utils/types';
+import { Todo } from '../../types';
+
+type HomePageState = {
+  isAddTodoOpen: boolean,
+  isEditTodoOpen: boolean,
+  todoJsonArr: Todo[],
+  updateJson: Partial<Todo>
+}
 
 const HomePage = () => {
   const [isError, setIsError] = useState(false);
@@ -23,13 +32,13 @@ const HomePage = () => {
 
   // Go to login page if user not logged in
   useEffect(() => {
-    if(!IsUserLoggedIn(cookies)) {
+    if(!IsUserLoggedIn(cookies as Cookies)) {
       navigate('/login');
     }
   },[])
 
   // Variables
-  const [state, setState] = useState({
+  const [state, setState] = useState<HomePageState>({
     isAddTodoOpen:false,
     isEditTodoOpen:false,
     todoJsonArr:[],
@@ -39,15 +48,15 @@ const HomePage = () => {
   // Toggle visibility of the modal form
   function toggleAddTodoForm() {
     setState(prevState => ({ ...prevState, isAddTodoOpen: !state.isAddTodoOpen }));
-  };
+  }
 
   function toggleUpdateTodoForm(){
     setState(prevState => ({ ...prevState, isEditTodoOpen: !state.isEditTodoOpen }));  
-  };
+  }
 
   const fetchData = async () => {
     try {
-      const username = GetUsername(cookies);
+      const username = GetUsername(cookies as Cookies);
       const config = {
         headers: {
           username: username
@@ -70,7 +79,7 @@ const HomePage = () => {
         return;
       }
 
-      jsonData.data.map((data, index) => {
+      jsonData.data.map((data: Todo, index: number) => {
         return jsonData.data[index].isLoading = false;
       })
       
@@ -93,10 +102,10 @@ const HomePage = () => {
     setRefreshCount(refreshCount+1);
   }, 10000);
 
-  function handleDelete(id) {
+  function handleDelete(id: string) {
     
     // Check if id exists in the array
-    if(state.todoJsonArr.some((todo) => {
+    if(state.todoJsonArr.some((todo: Todo) => {
       return todo._id === id;
     })) 
     {
@@ -105,27 +114,27 @@ const HomePage = () => {
     else {
       alert("something went wrong");
     }
-  };
+  }
 
-  function handleEdit(todoJson) {
+  function handleEdit(todoJson: Todo) {
     toggleUpdateTodoForm();
     setState(prevState=>({ ...prevState, updateJson:todoJson }));
-  };
+  }
 
-  function updateTodoListAfterDelete(id) {
-    const updatedTodoList = state.todoJsonArr.filter((todo) => {
+  function updateTodoListAfterDelete(id: string) {
+    const updatedTodoList = state.todoJsonArr.filter((todo: Todo) => {
       return todo._id !== id;
     });
     setState(prevState => ({ ...prevState, todoJsonArr: updatedTodoList }));
-  };
+  }
 
   // API request to add new todo
-  const addTodoAPI = async (todoJson) => {
+  const addTodoAPI = async (todoJson: Todo) => {
     try {
       setIsAddTodoAPI(true);
       const config = {
         headers: {
-          username: GetUsername(cookies),
+          username: GetUsername(cookies as Cookies),
           'Content-Type': 'application/json'
         }
       }
@@ -153,11 +162,11 @@ const HomePage = () => {
   };
   
   // API to delete todo
-  const deleteTodoAPI = async (id) => {
+  const deleteTodoAPI = async (id: string) => {
     try {
       const config = {
         headers: {
-          username: GetUsername(cookies),
+          username: GetUsername(cookies as Cookies),
           'Content-Type': 'application/json'
         }
       }
@@ -175,10 +184,10 @@ const HomePage = () => {
     }
   };
 
-  const setTodoUpdateLoading = (todoJson, status) => {
+  const setTodoUpdateLoading = (todoJson: Todo, status: boolean) => {
     setIsUpdateTodoAPI(status);
-    let todoArr = state.todoJsonArr;
-    const updateTodoList = todoArr.map((todo, index) => {
+    const todoArr: Todo[] = state.todoJsonArr;
+    const updateTodoList = todoArr.map((todo) => {
       if(todo._id === todoJson._id) {
         todo.isLoading = status;
       }
@@ -188,12 +197,12 @@ const HomePage = () => {
   }
 
   // Udpate Todo API
-  const updateTodoAPI = async(todoJson) => {
+  const updateTodoAPI = async(todoJson: Todo) => {
     try {
       setTodoUpdateLoading(todoJson, true);
       const config = {
         headers: {
-          username: GetUsername(cookies),
+          username: GetUsername(cookies as Cookies),
           'Content-Type': 'application/json'
         }
       }
@@ -207,7 +216,7 @@ const HomePage = () => {
         fetchData();
       }
       
-      let updatedArr = state.todoJsonArr.map((value) => {
+      const updatedArr: Todo[] = state.todoJsonArr.map((value) => {
         if(value._id === todoJson._id) {
           return todoJson;
         }
@@ -222,21 +231,21 @@ const HomePage = () => {
     }
   };
 
-  function handleAddTodo(todoJson) {
+  function handleAddTodo(todoJson: Todo) {
     addTodoAPI(todoJson);
-  };
+  }
 
-  function handleUpdateTodo(todoJson) {
+  function handleUpdateTodo(todoJson: Todo) {
     toggleUpdateTodoForm();
     updateTodoAPI(todoJson);
-  };
+  }
 
   const handleTryAgainClick = () => {
     fetchData();
   };
 
   const handleLogout = () => {
-    if(IsUserLoggedIn(cookies)){ 
+    if(IsUserLoggedIn(cookies as Cookies)){ 
       removeCookie('username', { path: '/' });
       navigate('/login');
     }
@@ -271,7 +280,7 @@ const HomePage = () => {
     </div>);
   }
   
-  if(IsUserLoggedIn(cookies)) {
+  if(IsUserLoggedIn(cookies as Cookies)) {
     // Application
     return (
   

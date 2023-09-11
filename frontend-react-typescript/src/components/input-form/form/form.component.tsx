@@ -3,8 +3,19 @@ import './form.styles.css';
 import InputField from '../input-field/input-field.component';
 import MyButton from '../../button/button.component';
 import InputArea from '../input-text-area/input-text-area.component';
+import { Todo } from '../../../types';
 
-function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okayBtnText}){
+type FormProps = {
+    todoJson: Partial<Todo>, 
+    isLoading: boolean,
+    onAddClick: (newTodoJson: Todo) => void,
+    isOpen: boolean,
+    formTitle: string,
+    onClose: () => void,
+    okayBtnText: string,
+}
+
+function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okayBtnText}: FormProps){
 
     const [state, setState] = useState({
         todoId:todoJson._id,
@@ -13,11 +24,11 @@ function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okay
         todoIsDone : todoJson.isDone
     });
 
-    function handleTitleChange(title) {
+    function handleTitleChange(title: string) {
         setState(prevState => ({ ...prevState, todoTitle: title }))
     }
 
-    function handleDescChange(desc) {
+    function handleDescChange(desc: string) {
         setState(prevState => ({ ...prevState, todoDesc: desc }))
     }
 
@@ -25,7 +36,7 @@ function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okay
         // Valid todo
         if(state.todoDesc && state.todoTitle &&
             state.todoDesc.length > 0 && state.todoTitle.length > 0) {
-            let newTodoJson = {_id:todoJson._id, title:state.todoTitle, 
+            const newTodoJson: Todo = {_id:todoJson._id, title:state.todoTitle, 
                 description:state.todoDesc, isDone:state.todoIsDone};
             onAddClick(newTodoJson);
         }
@@ -42,7 +53,6 @@ function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okay
 
                 {/* Title */}
                 <InputField 
-                    id="todoTitle"
                     placeHolder="Title"
                     onValueChange={handleTitleChange}
                     value={state.todoTitle}
@@ -51,7 +61,6 @@ function Form({todoJson, isLoading, onAddClick, isOpen, formTitle, onClose, okay
                 
                 {/* Description */}
                 <InputArea 
-                    id="todoDesc"
                     placeHolder="Description"
                     onValueChange={handleDescChange}
                     value={state.todoDesc}

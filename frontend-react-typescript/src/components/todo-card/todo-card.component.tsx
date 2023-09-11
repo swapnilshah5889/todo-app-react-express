@@ -3,9 +3,15 @@ import deleteImg from '../../assets/delete.svg';
 import editImg from '../../assets/edit.png';
 import Lottie from 'react-lottie';
 import LoaderLottie from '../../assets/blue-spinner.json';
+import { Todo } from '../../types';
 
+type CheckBoxProps = {
+    isChecked?: boolean,
+    onCheckBoxChange?: () => void,
+    isLoading?: boolean
+}
 
-const CheckBox = ({isChecked=false, onCheckBoxChange , isLoading}) => {
+const CheckBox = ({isChecked=false, onCheckBoxChange , isLoading}: CheckBoxProps) => {
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -28,7 +34,7 @@ const CheckBox = ({isChecked=false, onCheckBoxChange , isLoading}) => {
                     checked={isChecked} 
                     onChange={onCheckBoxChange}
                     type="checkbox" 
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 
                     dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 
                     dark:border-gray-600">
                 </input>
@@ -38,7 +44,29 @@ const CheckBox = ({isChecked=false, onCheckBoxChange , isLoading}) => {
 
 }
 
-function TodoCard({todoData, onDeleteClick, onEditClick, onStatusChange}) {
+type TodoCardProps = {
+    todoData: Todo,
+    onDeleteClick: (todoId: string) => void,
+    onEditClick: (todoData: Todo) => void,
+    onStatusChange: (todoData: Todo) => void
+}
+
+type CardButtonProps = {
+    btnImage: string,
+    handleClick: () => void
+}
+
+const CardButton = ({btnImage, handleClick}: CardButtonProps) => {
+    return (
+        <div className='flex justify-center mt-3'>
+            <img className='max-w-5 max-h-5' src={btnImage} alt="Edit" 
+                onClick={handleClick}
+            />
+        </div>
+    );
+}
+
+function TodoCard({todoData, onDeleteClick, onEditClick, onStatusChange}: TodoCardProps) {
 
     function handleDeleteTodo() {
         onDeleteClick(todoData._id);
@@ -60,20 +88,29 @@ function TodoCard({todoData, onDeleteClick, onEditClick, onStatusChange}) {
 
             {/* Card title bar */}
             <div className='card-title-ctn'>
+                <div className='grid grid-cols-12'>
+                    
+                    {/* Title */}   
+                    <div className='col-span-9 px-5 py-3'>
+                        <p className='card-title-text'>{todoData.title}</p>
+                    </div>
+                    
+                    <div className='col-span-3 flex justify-evenly'>
+                        {/* Edit Button */}
+                        <CardButton 
+                            btnImage={editImg}
+                            handleClick={handleEditTodo}
+                        />
+                        
+                        {/* Delete Button */}
+                        <CardButton 
+                            btnImage={deleteImg}
+                            handleClick={handleDeleteTodo}
+                        />
+                    
+                    </div>
                 
-                {/* Title */}
-                <h3 className='card-title-text'>{todoData.title}</h3>
-                
-                {/* Edit Button */}
-                <img src={editImg} alt="Edit" width={20} height={20}
-                    onClick={handleEditTodo}
-                />
-                
-                {/* Delete Button */}
-                <img src={deleteImg} alt="Delete" width={20} height={20}
-                    onClick={handleDeleteTodo}
-                />
-            
+                </div>
             </div>
 
             {/* Description */}
